@@ -30,7 +30,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 
  * @author mauriciofernandesdecastro
  */
-public abstract class AbstractSignUpController {
+public abstract class AbstractSignUpController 
+	extends AbstractCryptoController
+{
 
 	private static final Logger logger = LoggerFactory.getLogger(AbstractSignUpController.class);
 	
