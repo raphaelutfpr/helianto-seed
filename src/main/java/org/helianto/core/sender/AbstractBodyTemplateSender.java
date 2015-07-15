@@ -1,8 +1,11 @@
 package org.helianto.core.sender;
 
+import java.util.Map;
+
 import org.helianto.sendgrid.message.sender.AbstractTemplateSender;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * E-mail template base class.
@@ -30,12 +33,13 @@ public abstract class AbstractBodyTemplateSender
 	}
 	
 	@Override
-	protected String getConfirmationUri(String... params) {
-		return getApiUrl()+"/signup/verify?token=x";
+	protected String getConfirmationUri(String confirmationToken) {
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getApiUrl()+"/signup/verify").queryParam("confirmationToken", confirmationToken);
+		return builder.build().encode().toUri().toString();
 	}
 
 	@Override
-	public String getBody() {
+	public String getBody(Map<String, String> paramMap) {
 		StringBuilder body = new StringBuilder();
 		body.append("<div class='background-color: black; height: 12px;'> ")
 		.append("<p align=\"center\" class=\"view-browser text-align-center\" ")
@@ -45,15 +49,14 @@ public abstract class AbstractBodyTemplateSender
 		.append("<a href=\"")
 		.append(staticPath)
 		.append(getTemplateId())
-		.append(";");
-		if (hasConfirmationUri()) {
-			body.append("?confirmationuri=")
-			.append(getConfirmationUriEncoded());
+		.append(";?confirmationuri=");
+		if(paramMap.containsKey("confirmationToken")){
+			body.append(getConfirmationUriEncoded(getConfirmationUri(paramMap.get("paramMap"))));
 		}
-		body.append(getConfirmationUriEncoded())
-		.append("\" style=\"color: #08088A; text-decoration: underline;\">")
+		body.append("\" style=\"color: #08088A; text-decoration: underline;\">")
 		.append(staticRedirectMessage)
 		.append("</a></p></div>");
+		System.err.println(body.toString());
 		return body.toString();
 	}
 	

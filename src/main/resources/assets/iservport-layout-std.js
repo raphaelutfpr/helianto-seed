@@ -1,15 +1,5 @@
 var appLayout = angular.module('app.layout', [])
 
-	.directive('iservportTitle', function() {
-		return {
-			restrict: 'EA',			
-			template :'<div id="contentTitle" ng-include="iservportTitlePath"></div>',
-			controller: function($scope) {
-				$scope.iservportTitlePath = "/ng/"+$scope.baseName+"/selection-title.html";
-			}
-		}
-	
-	})
 	/**
 	 * Directiva lista qualificadores (segunda versão)
 	 */
@@ -21,6 +11,11 @@ var appLayout = angular.module('app.layout', [])
 			template: '<span class="badge alert-danger" data-ng-show="alert>0 ">{{alert}}</span>'
 		}
 	})
+	
+	/**
+	 * Menu
+	 */
+	
 	/**
 	 * Menu main wrapper
 	 * 
@@ -47,25 +42,6 @@ var appLayout = angular.module('app.layout', [])
 		  }
 	})
 	/**
-	 * Menu side wrapper
-	 * 
-	 * Example:
-	 * <div data-menu-side-wrapper>...</div>
-	 */
-	.directive('menuSideWrapper', function() {
-		  return {
-		    restrict: "A", 
-		    transclude: true,
-		    scope: { },
-		    template: '<div class="nav-wrapper">' +
-		              '<div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 100%;">' +
-		              '<ul id="nav" class="nav" data-slim-scroll data-collapse-nav data-highlight-active ng-transclude' +
-		              ' style="overflow: hidden; width: auto; height: 100%;">' +
-		              '</div>' +
-		              '</div>'
-		  }
-	})
-	/**
 	 * Menu line wrapper
 	 * 
 	 * Example:
@@ -82,6 +58,25 @@ var appLayout = angular.module('app.layout', [])
 		              '<i class="{{icon}}"></i>' +
 		              '<span data-ng-transclude></span>' +
 		              '</a></li>'
+		  }
+	})
+	/**
+	 * Menu side wrapper
+	 * 
+	 * Example:
+	 * <div data-menu-side-wrapper>...</div>
+	 */
+	.directive('menuSideWrapper', function() {
+		  return {
+		    restrict: "A", 
+		    transclude: true,
+		    scope: { },
+		    template: '<div class="nav-wrapper">' +
+		              '<div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 100%;">' +
+		              '<ul id="nav" class="nav" data-slim-scroll data-collapse-nav data-highlight-active ng-transclude' +
+		              ' style="overflow: hidden; width: auto; height: 100%;">' +
+		              '</div>' +
+		              '</div>'
 		  }
 	})
 	/**
@@ -103,6 +98,34 @@ var appLayout = angular.module('app.layout', [])
 		              '</div>'
 		  }
 	})
+	
+	/**
+	 * Modal
+	 */
+	
+	/**
+	 * Modal header wrapper
+	 * 
+	 * Example:
+	 * <div data-modal-header-wrapper>...</div>
+	 */
+	.directive('modalHeaderWrapper', function() {
+		  return {
+		    restrict: "A", 
+		    transclude: true,
+		    template: '<div class="modal-header">'+
+		              '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+		              '<span class="h4 modal-title" id="modalLabel" >' +
+		              '<ng-transclude></ng-transclude>' +
+		              '</span>' +
+		              '</div>'
+		  }
+	})
+
+	/**
+	 * Panel
+	 */
+	
 	/**
 	 * Panel wrapper
 	 * 
@@ -139,23 +162,7 @@ var appLayout = angular.module('app.layout', [])
 		              '</div>'
 		  }
 	})
-	/**
-	 * Modal header wrapper
-	 * 
-	 * Example:
-	 * <div data-modal-header-wrapper>...</div>
-	 */
-	.directive('modalHeaderWrapper', function() {
-		  return {
-		    restrict: "A", 
-		    transclude: true,
-		    template: '<div class="modal-header">'+
-		              '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-		              '<span class="h4 modal-title" id="modalLabel" >' +
-		              '<ng-transclude></ng-transclude>' +
-		              '</span>' +
-		              '</div>'
-		  }
-	});
+	
+	;
 
 ;

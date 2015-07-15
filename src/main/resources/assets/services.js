@@ -6,45 +6,6 @@ var myMod = angular.module('app.services', ['ngResource'])
     datepickerPopupConfig.showButtonBar = false;
 
 })
-.config(function ($provide, $httpProvider) {
-	$provide.factory('MyHttpInterceptor', ['$q','$location', function ($q, $location) {
-		return {
-			request: function (config) {
-				return config || $q.when(config);
-			},
-			requestError: function (rejection) {
-				return $q.reject(rejection);
-			},
-			response: function (response) {
-				
-				 if(response.config.url=="/logout"){
-					 //nao funciona ainda, 
-					 //resolvi com o href="/login" mas talvez isto seja uma idéia interessante
-					 //ele chega até aqui,,,
-					 $location.path('login');
-				 }
-				return response || $q.when(response);
-			},
-			responseError: function (rejection) {
-				return $q.reject(rejection);
-			}
-		};
-	}]);
-
-	$httpProvider.interceptors.push('MyHttpInterceptor');
-
-})
-.constant("optionsX", {
-	allowedContent: true,
-    entities: false,
-	toolbar : [{ name: 'document', 
-				 items: ['Format', '-', 'Bold', 'Italic', 'Underline', 'TextColor', '-', 
-						'NumberedList', 'BulletedList', '-', 'Checkbox', '-' , 
-						'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 
-						'Image', 'Link', 'Table', '-' , 
-						'Undo', 'Redo', '-', 'Source' ]
-			  }]
-})
 .factory("securityServices", ['$http', function($http) {
 	var categoryMapList =  {};
 	var getCategoryMap = function() {
@@ -128,46 +89,6 @@ var myMod = angular.module('app.services', ['ngResource'])
 .filter('pad', function() {
 	return function(num) {
 		return (num < 10 ? '0' + num : num); // coloca o zero na frente
-	};
-})
-//directives
-.directive('ngClock', ["$timeout", function($timeout){
-	return {
-		restrict: 'EA',
-		template:'<span class = "time">'
-			+ '<span class = "hours">'
-			+ ' {{date.getHours() | pad}}'
-			+ '</span>:<span class = "minutes">'
-			+ ' {{date.getMinutes() | pad}}'
-			+ '</span>:<span class = "seconds">'
-			+ ' {{date.getSeconds() | pad}}'
-			+ '</span>'
-			+ '</span>',
-			controller: function($scope, $element) {
-				$scope.date = new Date();
-
-				var tick = function() {
-					$scope.date = new Date();
-					$timeout(tick, 1000);
-				};
-				$timeout(tick, 1000);
-			}
-	}
-
-}])
-/**
- * Diretiva para customizar peças (veículos, etc..)
- */
-.directive('dynamic', function ($compile) {
-	return {
-		restrict: 'A',
-		replace: true,
-		link: function (scope, ele, attrs) {
-			scope.$watch(attrs.dynamic, function(template) {
-				ele.html(template);
-				$compile(ele.contents())(scope);
-			});
-		}
 	};
 })
 /**
