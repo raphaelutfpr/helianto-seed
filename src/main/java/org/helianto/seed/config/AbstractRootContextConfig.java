@@ -1,5 +1,10 @@
 package org.helianto.seed.config;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
@@ -7,6 +12,7 @@ import javax.sql.DataSource;
 
 import org.helianto.core.config.HeliantoServiceConfig;
 import org.helianto.core.sender.NotificationSender;
+import org.helianto.sendgrid.config.SendGridConfig;
 import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -34,7 +40,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
  */
 @Configuration
 @EnableWebMvc
-@Import({HeliantoServiceConfig.class})
+@Import({HeliantoServiceConfig.class, SendGridConfig.class})
 @ComponentScan(
 	basePackages = {
 		"org.helianto.*.controller"
@@ -42,6 +48,31 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 @EnableJpaRepositories(
     basePackages={"org.helianto.*.repository"})
 public abstract class AbstractRootContextConfig extends WebMvcConfigurerAdapter {
+	
+    /**
+     * Custom qualifier to allow for injection of key/name arrays.
+     */
+    @Target({ElementType.FIELD,
+            ElementType.METHOD,
+            ElementType.TYPE,
+            ElementType.PARAMETER})
+    @Retention(RetentionPolicy.RUNTIME)
+    @javax.inject.Qualifier
+    public static @interface KeyNameArray {}
+    
+	/**
+	 * Override to set JNDI name.
+	 */
+	protected String getJndiName() {
+		return "jdbc/iservportDB";
+	}
+	
+	/**
+	 * Override to set packages to scan.
+	 */
+	protected String[] getPacakgesToScan() {
+		return new String[] {"org.helianto.*.domain"};
+	}
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -53,21 +84,6 @@ public abstract class AbstractRootContextConfig extends WebMvcConfigurerAdapter 
 	
 	@Inject
 	private JpaVendorAdapter vendorAdapter;
-	
-	/**
-	 * Substitui a configuração original do <code>EntityManagerFactory</code>
-	 * para incluir novos pacotes onde pesquisar por entidades persistentes.
-	 */
-	@Bean 
-	public EntityManagerFactory entityManagerFactory() {
-		LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
-		bean.setDataSource(dataSource);
-		bean.setPackagesToScan("org.helianto.*.domain","com.iservport.*.domain");
-		bean.setJpaVendorAdapter(vendorAdapter);
-		bean.setPersistenceProvider(new HibernatePersistence());
-		bean.afterPropertiesSet();
-        return bean.getObject();
-	}
 	
 	/**
 	 * JNDI factory.
@@ -82,6 +98,21 @@ public abstract class AbstractRootContextConfig extends WebMvcConfigurerAdapter 
 		jndiFactory.setResourceRef(true);
 		jndiFactory.afterPropertiesSet();
 		return jndiFactory.getObject();
+	}
+	
+	/**
+	 * Substitui a configuração original do <code>EntityManagerFactory</code>
+	 * para incluir novos pacotes onde pesquisar por entidades persistentes.
+	 */
+	@Bean 
+	public EntityManagerFactory entityManagerFactory() {
+		LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
+		bean.setDataSource(dataSource);
+		bean.setPackagesToScan(getPacakgesToScan());
+		bean.setJpaVendorAdapter(vendorAdapter);
+		bean.setPersistenceProvider(new HibernatePersistence());
+		bean.afterPropertiesSet();
+        return bean.getObject();
 	}
 	
 	/**

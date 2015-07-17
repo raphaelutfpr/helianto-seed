@@ -1,4 +1,4 @@
-package org.helianto.root.repository;
+package org.helianto.network.repository;
 
 import org.helianto.core.domain.Entity;
 import org.helianto.security.internal.UserAdapter;

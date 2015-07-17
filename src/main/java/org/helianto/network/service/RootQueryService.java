@@ -1,4 +1,4 @@
-package org.helianto.root.service;
+package org.helianto.network.service;
 
 import java.io.Serializable;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.helianto.core.domain.Entity;
 import org.helianto.core.internal.KeyNameAdapter;
 import org.helianto.core.internal.QualifierAdapter;
 import org.helianto.core.internal.SimpleCounter;
-import org.helianto.root.repository.RootRepository;
+import org.helianto.network.repository.RootRepository;
 import org.helianto.security.internal.UserAdapter;
 import org.helianto.security.repository.EntityStatsRepository;
 import org.springframework.data.domain.Page;
@@ -32,23 +32,24 @@ public class RootQueryService {
 	@Inject
 	private RootRepository rootRepository;
 
+	@Inject
+	private KeyNameAdapterArray keyNameAdapterArray;
+
 	/**
-	 * Lista qualificadores.
+	 * List qualifiers.
 	 * 
 	 * @param entityId
 	 */
 	public List<QualifierAdapter> qualifier(int entityId) {
 		List<QualifierAdapter> qualifierList 
-			= QualifierAdapter.qualifierAdapterList(InternalEntityType.values());
-		
-		// realiza a contagem
+			= QualifierAdapter.qualifierAdapterList(keyNameAdapterArray.values());
 		qualifierCount(entityId, qualifierList);
 
 		return qualifierList;
 	}
 
 	/**
-	 * Método auxiliar para contar os qualificadores.
+	 * Helper method to count qualifiers.
 	 * 
 	 * @param entityId
 	 * @param qualifierList
@@ -58,11 +59,9 @@ public class RootQueryService {
 		// TODO Today default operator is  = 1
 		//
 		
-		// conta o entidades agrupados por categoria
 		List<SimpleCounter> counterListAll 
 			= entityStatsRepository.countActiveEntitiesGroupByType(1);
 		
-		// para cada qualificador preenchemos as contagens
 		for (QualifierAdapter qualifier: qualifierList) {
 			qualifier
 			.setCountItems(counterListAll);
@@ -71,7 +70,7 @@ public class RootQueryService {
 	}
 	
 	/**
-	 * Página de entidades vinculadas ao usuário.
+	 * User related entities page.
 	 * 
 	 * @param identityId
 	 * @param entityType
@@ -107,23 +106,34 @@ public class RootQueryService {
 	}
 	
 	/**
-	 * Enumeração interna para definir tipos
-	 * de entidade para este contexto de aplicação.
+	 * Subclasses may override to provide custom key/name arrays.
+	 */
+	protected KeyNameAdapterArray getKeyNameAdapterArray() {
+		if (keyNameAdapterArray!=null && keyNameAdapterArray.values().length>0) {
+			return keyNameAdapterArray;
+		}
+		return new KeyNameAdapterArray() {
+			@Override
+			public KeyNameAdapter[] values() {
+				return InternalEntityType.values();
+			}
+		};
+	}
+	
+	/**
+	 * Internal entity enum.
 	 * 
 	 * @author mauriciofernandesdecastro
 	 */
 	static enum InternalEntityType implements KeyNameAdapter {
 		
-		STARTUPS('C', "Startups"),
-		SPINOFFS('F', "Spinoffs"),
-		MENTORING('M', "Mentorias"),
-		INVESTORS('I', "Investidores");
+		COMMON('C', "Common");
 		
 		private char value;
 		private String desc;
 		
 		/**
-		 * Construtor.
+		 * Constructor.
 		 * 
 		 * @param value
 		 */

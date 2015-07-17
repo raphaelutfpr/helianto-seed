@@ -1,4 +1,4 @@
-package org.helianto.root.service;
+package org.helianto.network.service;
 
 import java.util.Date;
 import java.util.List;

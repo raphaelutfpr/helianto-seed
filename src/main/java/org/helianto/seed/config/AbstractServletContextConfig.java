@@ -19,6 +19,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
@@ -44,7 +45,7 @@ public abstract class AbstractServletContextConfig extends WebMvcConfigurerAdapt
 	}
 
 	/**
-	 * Registro de resolução de argumentos.
+	 * Argument resolvers.
 	 */
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
@@ -105,7 +106,7 @@ public abstract class AbstractServletContextConfig extends WebMvcConfigurerAdapt
 
     
 	/**
-	 * Formatadores.
+	 * Formatters.
 	 */
 	@Override
 	public void addFormatters(FormatterRegistry registry) {
@@ -160,15 +161,14 @@ public abstract class AbstractServletContextConfig extends WebMvcConfigurerAdapt
 		super.configureMessageConverters(converters);
     }
 
-    
-//    /**
-//	 * Commons multipart resolver.
-//	 */
-//	@Bean
-//	public CommonsMultipartResolver multipartResolver() {
-//		CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-//		resolver.setMaxUploadSize(10000000);
-//		return resolver;
-//	}
+    /**
+	 * Commons multipart resolver.
+	 */
+	@Bean
+	public CommonsMultipartResolver multipartResolver() {
+		CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+		resolver.setMaxUploadSize(10000000);
+		return resolver;
+	}
 
 }

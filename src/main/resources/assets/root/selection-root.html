@@ -1,0 +1,85 @@
+<div class="col-md-12"><h3>Network</h3></div><!-- title -->
+
+<!-- Filter -->
+<div class="col-md-3 col-sm-12">
+<div data-qualifier-panel="qualifiers" data-set-qualifier="setQualifier(value)" data-is-qualifier-active="isQualifierActive(value)" data-ng-init="setSectionTab(-1)" ></div>
+</div><!-- Filter -->
+
+<!-- Main -->
+<div class="col-md-9 col-sm-12">
+    <div class="panel panel-default">
+	<!--
+	 ! Título do painel
+	 !-->
+	<div class="panel-body">
+	<div class="row">
+		<div class="col-md-12">
+			<form id="rootForm" data-ng-submit="search(0, '/search/0/')" class="form-inline pull-right">
+				<button class="btn btn-primary" data-ng-click="openForm('form-root-entity')">Nova entidade</button>
+				<div class="input-group input-group-sm">
+				<input type="hidden" name="qualifierValue" value="C" data-ng-model="searchModel.qualifierValue" class="ng-pristine ng-untouched ng-valid">
+				<input type="hidden" name="_csrf" value="4078c879-e55c-433b-8fba-6318c09bc596">
+				<input type="text" class="form-control ng-pristine ng-untouched ng-valid" placeholder="Buscar" size="32" id="searchString" name="searchString" data-ng-model="searchModel.searchString">
+				<span class="input-group-btn">
+					<button value="inst" type="submit" class="btn btn-default inst"><i class="glyphicon glyphicon-search ng-scope" data-tooltip-placement="left" data-tooltip="Pesquisar itens"></i></button>
+				</span>
+				</div>
+			</form>	
+			<div class="h4">{{root.entity.alias}}</div>
+		</div>
+	</div>
+    <!-- Mensagem -->
+	<div class="alert alert-warning alert-dismissible col-xs-9 ng-hide" data-ng-show="contents.length==0" role="alert">
+	    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+	    <div data-ng-bind-html="NO_CONTENT_MSG" class="ng-binding"><strong>Não há entidades!</strong> clique no botão abaixo para cadastrar uma nova</div>
+	</div>
+		
+	<div data-ng-show="root.userId>0">
+		<div data-root-wrapper data-root="root">
+	   		<div class="h4 text-left" style="white-space: normal;">
+	    			<a class="btn btn-default" href="" data-ng-click="authorize()" >Autorizar</a>
+	    	</div>
+		</div>
+		<hr/>			
+	</div>
+
+    <!-- Apresentação das entidades -->
+	<a data-ng-repeat="root in rootList.content"
+	   data-ng-click='getRoot(root.userId)'
+	   data-ng-class='{selected: root.id==entity.id}'
+	   class="btn col-md-4 col-xs-12">
+	   <div data-root-wrapper data-root="root"></div>
+	</a>
+		
+	</div><!-- panel body -->
+	<div class="panel-footer">
+	<pagination total-items="rootList.numberOfElements" ng-model="rootList.number" ng-change="pageChanged()"></pagination>
+	</div><!-- panel footer -->
+	</div><!-- panel -->
+</div>
+	
+<!-- div class="row">
+	<div class="col-md-1" >
+	<a class="btn btn-sm btn-default" 
+		data-ng-if="nextAndPrevious.hasNext" 
+		
+		data-ng-click="rootAdapter(qualifierType, rootResolution,nextAndPrevious.next,isSearch())">
+		
+		<i class="glyphicon glyphicon-chevron-down"></i>
+	</a>
+	</div>
+	<div class="col-md-10 text-center" >
+	<h4>
+	{{RootAdapterList1.number * RootAdapterList1.size}} 
+	- {{(RootAdapterList1.number * RootAdapterList1.size) + RootAdapterList1.numberOfElements}} 
+	/ {{RootAdapterList1.totalElements}}
+	</h4>
+	</div>
+	<div class="col-md-1" >
+	<a class="btn btn-sm btn-default pull-right" 
+		data-ng-if="nextAndPrevious.hasPrevious" 
+		data-ng-click="rootAdapter(qualifierType, rootResolution,nextAndPrevious.previous,isSearch())">
+		<i class="glyphicon glyphicon-chevron-up"></i>
+	</a>
+	</div>
+</div>-->
