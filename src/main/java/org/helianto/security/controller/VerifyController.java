@@ -48,7 +48,7 @@ public class VerifyController
 	extends AbstractCryptoController
 {
 	
-	private static final Logger logger = LoggerFactory.getLogger(SignupController.class);
+	private static final Logger logger = LoggerFactory.getLogger(VerifyController.class);
 	
 	public static final String PWD_CREATE = "/login/createPassword";
 	
