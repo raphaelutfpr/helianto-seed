@@ -6,6 +6,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.helianto.core.config.HeliantoServiceConfig;
+import org.helianto.core.sender.NotificationSender;
 import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -107,6 +108,14 @@ public abstract class AbstractRootContextConfig extends WebMvcConfigurerAdapter 
         registry.addResourceHandler("/assets/**").addResourceLocations("classpath:/assets/").setCachePeriod(31556926);
         registry.addResourceHandler("/views/**").addResourceLocations("classpath:/views/").setCachePeriod(31556926);
 	}	                    
+	
+	/**
+	 * Notification sender.
+	 */
+	@Bean
+	public NotificationSender notificationSender() {
+		return new NotificationSender();
+	}
 	
 	/**
 	 * Password encoder.

@@ -4,14 +4,12 @@ import javax.inject.Inject;
 
 import org.helianto.sendgrid.message.sender.AbstractTemplateSender;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 /**
+ * Standard notification sender.
  * 
  * @author mauriciofernandesdecastro
- *
  */
-@Component
 public class NotificationSender 
 	extends AbstractTemplateSender
 {
@@ -28,7 +26,7 @@ public class NotificationSender
 	 */
 	@Inject
 	public NotificationSender() {
-		super(noReplyEmail, rootFullName, "userConfirmation");
+		super(noReplyEmail, rootFullName, "notificationSender");
 	}
 
 }
