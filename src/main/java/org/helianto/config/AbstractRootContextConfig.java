@@ -1,4 +1,4 @@
-package org.helianto.seed.config;
+package org.helianto.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -49,17 +49,6 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
     basePackages={"org.helianto.*.repository"})
 public abstract class AbstractRootContextConfig extends WebMvcConfigurerAdapter {
 	
-    /**
-     * Custom qualifier to allow for injection of key/name arrays.
-     */
-    @Target({ElementType.FIELD,
-            ElementType.METHOD,
-            ElementType.TYPE,
-            ElementType.PARAMETER})
-    @Retention(RetentionPolicy.RUNTIME)
-    @javax.inject.Qualifier
-    public static @interface KeyNameArray {}
-    
 	/**
 	 * Override to set JNDI name.
 	 */

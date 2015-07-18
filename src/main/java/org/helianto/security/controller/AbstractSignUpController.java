@@ -118,7 +118,7 @@ public abstract class AbstractSignUpController
 		
 		// Testando se houve um registro anterior bem sucedido.
 		if (identity!=null) {
-			List<User> userList = userRepository.findByIdentityIdOrderByLastEventDesc(identity.getId());
+			List<User> userList = userRepository.findByIdentity_IdOrderByLastEventDesc(identity.getId());
 			
 			boolean isActive = false;
 			for (User user: userList) {

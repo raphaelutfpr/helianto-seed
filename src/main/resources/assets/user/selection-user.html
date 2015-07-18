@@ -1,0 +1,40 @@
+<div class="col-md-12"><h3>User</h3></div><!-- title -->
+
+<!-- Filter -->
+<div class="col-md-3 col-sm-12">
+<div data-qualifier-panel="qualifiers" data-set-qualifier="setQualifier(value)" data-is-qualifier-active="isQualifierActive(value)" data-ng-init="setSectionTab(-1)" ></div>
+</div><!-- Filter -->
+
+<!-- Main -->
+<div class="col-md-9 col-sm-12">
+    <div class="panel panel-default">
+    <div class="panel-body">
+	<div class="row">
+		<div class="col-md-12">
+		</div>
+		<div class="col-md-6 col-xs-12">
+		<table class="table table-hover">
+		  <tbody>
+		    <tr data-ng-class="{active: userItem.userId==user.userId}" 
+		    	data-ng-click="getUser(userItem.userId)"
+	 			data-ng-repeat="userItem in userList.content" >
+		      <td class="h4" style="min-width:72px; width: 72px;">
+		          <img class="media-object img-circle" style="width:45px" data-ng-src="{{userItem.userImageUrl}}" data-err-src="/images/user/gender64-N.png">
+		      </td>
+		      <td >{{userItem.userKey}}
+		        <h5>{{userItem.displayName.length>0?userItem.displayName:userItem.userName}}</h5>
+		      </td>
+		    </tr>
+		  </tbody>
+		</table>
+		</div>
+		<div class="col-md-6 col-xs-12">
+		</div>
+	</div>
+	</div><!-- panel body -->
+	<div class="panel-footer">
+	<div data-pagination data-total-items="userList.numberOfElements" 
+	     data-ng-model="userList.number" data-ng-change="pageChanged()"></div>
+	</div><!-- panel footer -->
+	</div><!-- panel -->
+</div>
