@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 public class UserQueryService {
 
 	@Inject 
-	private UserRepository userTmpRepository;
+	private UserRepository userRepository;
 
 	@Inject
 	private UserKeyNameAdapterArray keyNameAdapterArray;
@@ -66,10 +66,21 @@ public class UserQueryService {
 	 * @param userType
 	 * @param userStates
 	 * @param pageNumber
+	 * @param itemsPerPage
 	 */
-	public Page<User> userList(int entityId, Character userType, String userStates, Integer pageNumber) {
-		Pageable page = new PageRequest(pageNumber, 20, Direction.ASC, "userName");
-		return userTmpRepository.findByParentUserType(entityId, userType, userStates.toCharArray(), page);
+	public Page<User> userList(int entityId, Character userType, String userStates, Integer pageNumber, Integer itemsPerPage) {
+		Pageable page = new PageRequest(pageNumber, itemsPerPage, Direction.ASC, "userName");
+		return userRepository.findByParentUserType(entityId, userType, userStates.toCharArray(), page);
+	}
+	
+	/**
+	 * Get user.
+	 * 
+	 * @param userId
+	 */
+	public User user(int entityId, Integer userId) {
+		User user = userRepository.findAdapter(userId);
+		return user;
 	}
 
 }

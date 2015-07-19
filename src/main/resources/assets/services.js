@@ -322,6 +322,34 @@ var myMod = angular.module('app.services', ['ngResource'])
 		};
 	})
 	/**
+	 * Directiva lista qualificadores (segunda versão)
+	 */
+	.directive('qualifierNav', function($compile) {
+		return {
+			restrict: 'A',
+			terminal: true,
+			scope: { qualifiers: '=qualifierNav', setQualifier: '&', isQualifierActive: '&' },
+			link:function(scope, element, attrs){
+				element.addClass("panel panel-default");
+				scope.countLabel=attrs.countlabel;
+				if (!attrs.countlabel) { 
+					scope.countLabel = 'Item(s)'; 
+				}
+				$compile(element.contents())(scope.$new());
+			},
+			template:
+				'<ul class="list-group">' +
+				'<a href="" class="list-group-item" data-ng-repeat="qualifierItem in qualifiers" ' + 
+				'   data-ng-click="setQualifier({value: qualifierItem.qualifierValue})" >' +
+				'<div data-ng-class="{h4: isQualifierActive({value: qualifierItem.qualifierValue}) }">' +
+				'<i class="{{qualifierItem.fontIcon}}" data-ng-if="qualifierItem.fontIcon.length>0"></i>' +
+				'{{qualifierItem.qualifierName}}' +
+			    '</div>' +
+			    '<span style="font-size: 70%; color: #aaa;">{{qualifierItem.countItems}} {{countLabel}}</span>' +
+			    '</a></ul>'
+		};
+	})
+	/**
 	 * Qualifier service.
 	 */
 	.factory('qualifierService', function() {

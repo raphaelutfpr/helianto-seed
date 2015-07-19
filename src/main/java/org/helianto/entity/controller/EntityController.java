@@ -9,7 +9,7 @@ import org.helianto.core.repository.EntityReadAdapter;
 import org.helianto.core.repository.EntityRepository;
 import org.helianto.security.internal.UserAuthentication;
 import org.helianto.security.repository.UserAuthorityReadAdapter;
-import org.helianto.user.repository.UserReadAdapter;
+import org.helianto.user.domain.User;
 import org.helianto.user.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,8 +64,8 @@ public class EntityController {
 	 */
 	@RequestMapping(value="/user", method= RequestMethod.GET)
 	@ResponseBody
-	public UserReadAdapter user(Integer userId) {
-		UserReadAdapter adapter = userRepository.findAdapter(userId);
+	public User user(Integer userId) {
+		User adapter = userRepository.findAdapter(userId);
 		logger.debug("User found: {}.", adapter);
 		return adapter;
 	}

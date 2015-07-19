@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.helianto.config.PageDecorator;
 import org.helianto.core.internal.QualifierAdapter;
 import org.helianto.security.internal.UserAuthentication;
 import org.helianto.user.domain.User;
@@ -48,13 +49,27 @@ public class UserController {
 	/**
 	 * List users.
 	 * 
-	 * GET		/api/user/?userType&userStates&pageNumber
+	 * GET		/api/user/?userType&userStates&pageNumber&itemsPerPage
 	 */
 	@RequestMapping(value={"/", ""}, method=RequestMethod.GET, params={"userType", "userStates"})
 	@ResponseBody                                                           
 	public Page<User> userList(UserAuthentication userAuthentication, @RequestParam Character userType
-			, @RequestParam String userStates, @RequestParam(defaultValue="0") Integer pageNumber) {
-		return userQueryService.userList(userAuthentication.getEntityId(), userType, userStates, pageNumber);
+			, @RequestParam String userStates, @RequestParam(defaultValue="1") Integer pageNumber
+			, @RequestParam(defaultValue="20") Integer itemsPerPage) {
+		Page<User> userList = new PageDecorator<User>(
+				userQueryService.userList(userAuthentication.getEntityId(), userType, userStates, pageNumber - 1, itemsPerPage));
+		return userList;
+	}
+		
+	/**
+	 * List users.
+	 * 
+	 * GET		/api/user/?userType&userStates&pageNumber&itemsPerPage
+	 */
+	@RequestMapping(value={"/", ""}, method=RequestMethod.GET, params={"userId"})
+	@ResponseBody                                                           
+	public User user(UserAuthentication userAuthentication, @RequestParam Integer userId) {
+		return userQueryService.user(userAuthentication.getEntityId(), userId);
 	}
 	
 }

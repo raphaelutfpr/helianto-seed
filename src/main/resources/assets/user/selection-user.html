@@ -1,22 +1,39 @@
-<div class="col-md-12"><h3>User</h3></div><!-- title -->
-
-<!-- Filter -->
-<div class="col-md-3 col-sm-12">
-<div data-qualifier-panel="qualifiers" data-set-qualifier="setQualifier(value)" data-is-qualifier-active="isQualifierActive(value)" data-ng-init="setSectionTab(-1)" ></div>
-</div><!-- Filter -->
+<div class="col-md-12"><h3>Pessoas</h3></div><!-- title -->
 
 <!-- Main -->
-<div class="col-md-9 col-sm-12">
-    <div class="panel panel-default">
-    <div class="panel-body">
+<div class="col-sm-12">
+    <div class="ui-tab-container ui-tab-horizontal panel panel-default">
+
+    <div data-justified="false" class="ui-tab">
+	<ul class="nav nav-tabs" >
+	<li data-ng-repeat="qualifier in qualifiers">
+		<a href="" data-ng-click="setQualifier(qualifier.qualifierValue)">{{qualifier.qualifierName}}
+		<br><span style="font-size: 70%;">{{qualifier.countItems}} pessoa(s)</span>
+		</a>
+	</li>
+	<li class="navbar-form navbar-right" role="search" id="rootForm" 
+		data-ng-submit="search(0, '/search/0/')" >
+		<div class="input-group input-group-sm">
+		<input type="hidden" name="qualifierValue" value="C" data-ng-model="searchModel.qualifierValue" class="ng-pristine ng-untouched ng-valid">
+		<input type="hidden" name="_csrf" value="4078c879-e55c-433b-8fba-6318c09bc596">
+		<input type="text" class="form-control ng-pristine ng-untouched ng-valid" placeholder="Buscar" size="32" id="searchString" name="searchString" data-ng-model="searchModel.searchString">
+		<span class="input-group-btn">
+			<button value="inst" type="submit" class="btn btn-default inst"><i class="glyphicon glyphicon-search ng-scope" data-tooltip-placement="left" data-tooltip="Pesquisar itens"></i></button>
+		</span>
+		</div>
+	</li>	
+	</ul>
+    
+    <div class="tab-content">
 	<div class="row">
 		<div class="col-md-12">
+		
 		</div>
-		<div class="col-md-6 col-xs-12">
+		<div class="col-md-4 col-xs-12">
 		<table class="table table-hover">
 		  <tbody>
-		    <tr data-ng-class="{active: userItem.userId==user.userId}" 
-		    	data-ng-click="getUser(userItem.userId)"
+		    <tr data-ng-class="{active: userItem.id==user.id}" 
+		    	data-ng-click="getUser(userItem.id)"
 	 			data-ng-repeat="userItem in userList.content" >
 		      <td class="h4" style="min-width:72px; width: 72px;">
 		          <img class="media-object img-circle" style="width:45px" data-ng-src="{{userItem.userImageUrl}}" data-err-src="/images/user/gender64-N.png">
@@ -28,13 +45,58 @@
 		  </tbody>
 		</table>
 		</div>
-		<div class="col-md-6 col-xs-12">
+		<div class="col-md-8 col-xs-12">
+		<table class="table">
+		  <tbody>
+		    <tr >
+		      <td class="h4" style="min-width:72px; width: 72px;">
+		          <img class="media-object img-circle" style="width:45px" data-ng-src="{{user.userImageUrl}}" data-err-src="/images/user/gender64-N.png">
+		      </td>
+		      <td >{{user.userKey}}
+		        <h5>{{user.displayName.length>0?user.displayName:user.userName}}</h5>
+		      </td>
+		      <td><button class="btn btn-primary pull-right" data-ng-click="openForm('form-user')">Editar</button>
+		      </td>
+		    </tr>
+		  </tbody>
+		</table>
+		<div class="panel panel-default">
+		<div class="panel-body">
+		<p>{{user.userState}}</p>
+		<p>{{user.userGender}}</p>
+		</div>
+		</div>
+		<!-- 
+displayName: null
+firstName: null
+id: 357
+jobTitle: “"
+key: 357
+lastEvent: 1437260304022
+lastName: null
+minimalEducationRequirement: 0
+minimalExperienceRequirement: 0
+systemGroup: false
+userBirthDate: 1437260304054
+userDesc: “"
+userGroupId: 36
+userImageUrl: null
+userType: " "
+ -->
 		</div>
 	</div>
-	</div><!-- panel body -->
+	</div><!-- tab-content -->
+	</div>
+	
 	<div class="panel-footer">
-	<div data-pagination data-total-items="userList.numberOfElements" 
-	     data-ng-model="userList.number" data-ng-change="pageChanged()"></div>
+	<div data-pagination data-total-items="userList.totalElements" data-items-per-page="itemsPerPage"
+	     data-ng-model="userList.number" data-ng-change="pageChanged()"
+	     data-previous-text="<" data-next-text=">" ></div>
+	<div class="pull-right">
+		<a href="" data-ng-class="{active: ipg==itemsPerPage}" data-ng-click="setItemsPerPage(ipg)" 
+		data-ng-repeat="ipg in [5, 10, 20]"
+		class="btn btn-sm">{{ipg}} </a>
+	</div>
 	</div><!-- panel footer -->
 	</div><!-- panel -->
 </div>
