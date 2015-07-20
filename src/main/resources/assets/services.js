@@ -230,69 +230,6 @@ var myMod = angular.module('app.services', ['ngResource'])
 		}
 	}
 })
-/**
- * Diretiva para gráfico de estatísticas de treinamento.
- */
-.directive('knldgStatsGraph', function(){
-	function createChart(el_id, value) {
-		var dataChart  = [];
-		value.forEach(function(entry) {
-			var labelName = '';
-			switch (entry.baseClass) {
-				case "1":
-					labelName = "Treinar";
-					break;
-				case "2":
-					labelName = "Acompanhar";
-					break;
-				case "3":
-					labelName = "Treinado";
-					break;
-				case "4":
-					labelName = "Pode treinar";
-					break;
-			} 
-			var value = {value: entry.itemCount, label: labelName};
-			dataChart.push(value);
-		});
-		var options = 
-		{ 	  
-			  element: el_id
-			, data: dataChart
-			, backgroundColor: '#ccc'
-			, labelColor: '#155882'
-			, colors: [ '#F89520', '#9AA6BF', '#7487A8', '#155882']
-			, formatter: function (x) { return x }
-		}
-		var r = new Morris.Donut(options);
-		return r;
-	}
-	return {
-		restrict: 'EA',
-		scope: {
-			options: '='
-		},
-		replace: true,
-		template: '<div></div>',
-		link: function link(scope, element, attrs) {
-			return createChart(attrs.id, scope.options);
-		}
-	};
-})
-.directive('paging', function() {
-	return {
-		restrict: 'EA',				  	    
-		scope: {
-			PreviousFn: '& previous',
-			NextFn:'& next',
-			nextAndPrevious : '=',
-			pageList : '='
-		},				    
-		link:function(scope, element, attrs){
-		},	
-		templateUrl: '/assets/_template/pagination.html'
-	};
-})
 	/**
 	 * Directiva lista qualificadores (segunda versão)
 	 */
