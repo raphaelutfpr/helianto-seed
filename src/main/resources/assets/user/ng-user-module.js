@@ -2,7 +2,7 @@
 	/**
 	 * Angular user module.
 	 */
-	app = angular.module('user', ['ui.bootstrap', 'app.services', 'angular-redactor'])
+	app = angular.module('user', ['ui.bootstrap', 'app.layout', 'angular-loading-bar', 'app.services'])
 	/**
 	 * Resources service.
 	 */
@@ -47,7 +47,7 @@
 				if (data.content.length>0) {
 					if ($scope.userId === 0  && externalId==0) {
 						$scope.user = data.content[0];
-						$scope.userId = user.id;
+						$scope.userId = $scope.user.id;
 					}
 				}
 			})

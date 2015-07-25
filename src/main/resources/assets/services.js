@@ -177,7 +177,7 @@ var myMod = angular.module('app.services', ['ngResource'])
 					scope.authorizedEntity = data;
 				});		
 			},
-			template :'<div id="authorizedEntity">{{authorizedEntity.entityAlias.length>0?authorizedEntity.entityAlias:"UBIVIS"}}</div>'
+			template :'<div id="authorizedEntity">{{authorizedEntity.entityAlias.length>0?authorizedEntity.entityAlias:"..."}}</div>'
 		}
 
 }])
@@ -191,7 +191,7 @@ var myMod = angular.module('app.services', ['ngResource'])
 		return {
 			restrict: 'EA',
 			link:function(scope, element, attrs) {
-				$http.get('/app/home/user')
+				$http.get('/api/entity/user')
 				.success(function(data, status, headers, config) {
 					
 					scope.userLabel = data.userKey; 
@@ -230,6 +230,39 @@ var myMod = angular.module('app.services', ['ngResource'])
 		}
 	}
 })
+.directive("toggleNavCollapsedMin", ["$rootScope", function($rootScope) {
+            return {
+                restrict: "A",
+                link: function(scope, ele) {
+                    var app;
+                    return app = $("#app"), ele.on("click", function(e) {
+                        return app.hasClass("nav-collapsed-min") ? app.removeClass("nav-collapsed-min") : (app.addClass("nav-collapsed-min"), $rootScope.$broadcast("nav:reset")), e.preventDefault()
+                    })
+                }
+            }
+        }])
+.directive("collapseNav", [function() {
+            return {
+                restrict: "A",
+                link: function(scope, ele) {
+                    var $a, $aRest, $app, $lists, $listsRest, $nav, $window, Timer, prevWidth, updateClass;
+                    return $window = $(window), $lists = ele.find("ul").parent("li"), $lists.append('<i class="ti-angle-down icon-has-ul-h"></i><i class="ti-angle-double-right icon-has-ul"></i>'), $a = $lists.children("a"), $listsRest = ele.children("li").not($lists), $aRest = $listsRest.children("a"), $app = $("#app"), $nav = $("#nav-container"), $a.on("click", function(event) {
+                        var $parent, $this;
+                        return $app.hasClass("nav-collapsed-min") || $nav.hasClass("nav-horizontal") && $window.width() >= 768 ? !1 : ($this = $(this), $parent = $this.parent("li"), $lists.not($parent).removeClass("open").find("ul").slideUp(), $parent.toggleClass("open").find("ul").stop().slideToggle(), event.preventDefault())
+                    }), $aRest.on("click", function() {
+                        return $lists.removeClass("open").find("ul").slideUp()
+                    }), scope.$on("nav:reset", function() {
+                        return $lists.removeClass("open").find("ul").slideUp()
+                    }), Timer = void 0, prevWidth = $window.width(), updateClass = function() {
+                        var currentWidth;
+                        return currentWidth = $window.width(), 768 > currentWidth && $app.removeClass("nav-collapsed-min"), 768 > prevWidth && currentWidth >= 768 && $nav.hasClass("nav-horizontal") && $lists.removeClass("open").find("ul").slideUp(), prevWidth = currentWidth
+                    }, $window.resize(function() {
+                        var t;
+                        return clearTimeout(t), t = setTimeout(updateClass, 300)
+                    })
+                }
+            }
+        }])
 	/**
 	 * Directiva lista qualificadores (segunda versão)
 	 */

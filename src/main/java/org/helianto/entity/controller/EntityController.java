@@ -64,8 +64,8 @@ public class EntityController {
 	 */
 	@RequestMapping(value="/user", method= RequestMethod.GET)
 	@ResponseBody
-	public User user(Integer userId) {
-		User adapter = userRepository.findAdapter(userId);
+	public User user(UserAuthentication userAuthentication) {
+		User adapter = userRepository.findAdapter(userAuthentication.getUserId());
 		logger.debug("User found: {}.", adapter);
 		return adapter;
 	}
