@@ -43,6 +43,7 @@ public class LoginController {
 	 * Logout page.
 	 * 
 	 * GET		/logout
+	 * @deprecated
 	 */
 	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value="/logout",method= RequestMethod.GET)

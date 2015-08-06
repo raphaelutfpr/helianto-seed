@@ -30,7 +30,6 @@ import org.helianto.install.service.UserInstallService;
 import org.helianto.security.domain.IdentitySecret;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,17 +37,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * Controlador para exibir o formulário de cadastro.
+ * Verify controller.
  * 
  * @author mauriciofernandesdecastro
  */
-@Controller
 @RequestMapping("/verify")
-public class VerifyController
+public abstract class AbstractVerifyController
 	extends AbstractCryptoController
 {
 	
-	private static final Logger logger = LoggerFactory.getLogger(VerifyController.class);
+	private static final Logger logger = LoggerFactory.getLogger(AbstractVerifyController.class);
 	
 	public static final String PWD_CREATE = "/login/createPassword";
 	
@@ -91,9 +89,9 @@ public class VerifyController
 	 * @param model
 	 * @param identityId
 	 */
-	@RequestMapping(value="/verify", method= RequestMethod.GET)
-	public String verify(Model model, @RequestParam String token) {
-		int identityId = decriptAndValidateToken(token);
+	@RequestMapping(value={"/", ""}, method= RequestMethod.GET, params={"confirmationToken"})
+	public String verify(Model model, @RequestParam String confirmationToken) {
+		int identityId = decriptAndValidateToken(confirmationToken);
 		if (identityId!=0) {
 			Identity  identity = identityRepository.findOne(identityId);
 			logger.debug("Identity verified {} ", identity.getPrincipal());
