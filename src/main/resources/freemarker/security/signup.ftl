@@ -48,7 +48,18 @@
     	<h3 class="panel-title"><span class="glyphicon glyphicon-user"></span> Dados para contato</h3>
     </div>
 	<div class="panel-body">
-		<form class="m-t" role="form"  method="POST" name="form"  id="signup" action="/signup/insert">
+		<form class="m-t" role="form"  method="POST" name="form"  id="signup" action="/signup/">
+		
+			<#--
+			 # CSRF
+			 #-->
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+
+			<#--
+			 # Context id
+			 #-->
+			<input type="hidden" name="contextId" value="${contextId!1}" />
+				
 			<#--
 			 # Email inválido
 			 #-->
@@ -86,11 +97,6 @@
 			
 			
 			<div class="form-group">
-			<#--
-			 # CSRF
-			 #-->
-
-			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			<input  type="text" class="form-control" name="firstName"  placeholder="Nome" required="" />
 			
 			<#--

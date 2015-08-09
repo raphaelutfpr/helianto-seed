@@ -32,6 +32,11 @@
 			 # CSRF
 			 #--]
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+			
+			[#--
+			 # Context id
+			 #--]
+			<input type="hidden" name="contextId" value="${contextId!1}" />
 				
 			[#if error?? ]
 				[#if user?? && !user.accountNonExpired  ]		

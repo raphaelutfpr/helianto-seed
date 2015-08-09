@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @RequestMapping(value={"/api/root"})
 @Controller
+@PreAuthorize("isAuthenticated()")
 public class RootSearchController {
 
 	private static final Logger logger = LoggerFactory.getLogger(RootSearchController.class);
@@ -48,7 +49,6 @@ public class RootSearchController {
 	 *
 	 * GET /api/root/qualifier
 	 */
-	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = { "/qualifier" }, method = RequestMethod.GET)
 	@ResponseBody
 	public List<QualifierAdapter> qualifier(
@@ -61,7 +61,6 @@ public class RootSearchController {
 	 *
 	 * GET /api/root/entity?entityType
 	 */
-	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value ="/entity", method = RequestMethod.GET, params={"entityType"})
 	@ResponseBody
 	public Page<UserAdapter> entities(UserAuthentication userAuthentication, @RequestParam Character entityType) {
@@ -73,7 +72,6 @@ public class RootSearchController {
 	 * 
 	 * GET /api/root/entity/?userId
 	 */
-	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value ="/entity", method = RequestMethod.GET, params={"userId"})
 	@ResponseBody
 	public UserAdapter entity(UserAuthentication userAuthentication, @RequestParam Integer userId) {
@@ -87,7 +85,6 @@ public class RootSearchController {
 	 * @param model
 	 * @param searchString
 	 */
-	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value="/search", method= RequestMethod.POST)
 	@ResponseBody
 	public Page<UserAdapter> search(UserAuthentication userAuthentication, @RequestParam(defaultValue="0") Integer pageNumber
@@ -104,7 +101,6 @@ public class RootSearchController {
 	 * @param model
 	 * @param searchString
 	 */
-	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value="/entity", method= RequestMethod.GET, params={"rootUserId"})
 	@ResponseBody
 	public String authorize(UserAuthentication userAuthentication, HttpServletRequest request
@@ -117,6 +113,12 @@ public class RootSearchController {
 		return null;
 	}
 	
+	/**
+	 * Cancel remember-me cookie.
+	 * 
+	 * @param request
+	 * @param response
+	 */
 	protected void cancelRemeberMeCookie(HttpServletRequest request, HttpServletResponse response) {
 		String cookieName = AbstractRememberMeServices.SPRING_SECURITY_REMEMBER_ME_COOKIE_KEY;
 		  Cookie cookie = new Cookie(cookieName, null);

@@ -1,9 +1,10 @@
 package org.helianto.security.controller;
 
+import javax.inject.Inject;
+
 import org.helianto.core.domain.Entity;
 import org.helianto.core.repository.EntityRepository;
 import org.helianto.security.internal.UserAuthentication;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value={"/login"})
 public class LoginController {
 	
-	@Autowired 
+	public static final String LOGIN_TEMPLATE = "security/login";
+	
+	@Inject 
 	private EntityRepository entityRepository;
 	
 	/**
@@ -34,7 +37,7 @@ public class LoginController {
 		if (error!=null && error.equals("1")) {
 			model.addAttribute("error", "1");
 		}
-		return "/security/login";
+		return LOGIN_TEMPLATE;
 	}
 
 	
