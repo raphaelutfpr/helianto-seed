@@ -47,7 +47,7 @@ public class SignupServiceTests {
 		expect(userRepository.findByIdentityPrincipal("principal")).andReturn(userList);
 		replay(userRepository);
 		
-		assertTrue(signupService.notifyAdminIfUserIsNotValid(signup));
+		assertTrue(signupService.allUsersForIdentityAreValid(signup));
 		
 	}
 
@@ -61,7 +61,7 @@ public class SignupServiceTests {
 		expect(userRepository.findByIdentityPrincipal("principal")).andReturn(userList);
 		replay(userRepository);
 		
-		assertFalse(signupService.notifyAdminIfUserIsNotValid(signup));
+		assertTrue(signupService.allUsersForIdentityAreValid(signup));
 		
 	}
 
@@ -75,7 +75,7 @@ public class SignupServiceTests {
 		expect(userRepository.findByIdentityPrincipal("principal")).andReturn(userList);
 		replay(userRepository);
 		
-		assertFalse(signupService.notifyAdminIfUserIsNotValid(signup));
+		assertTrue(signupService.allUsersForIdentityAreValid(signup));
 		
 	}
 
@@ -97,7 +97,7 @@ public class SignupServiceTests {
 		expect(userRepository.findByIdentityPrincipal("principal")).andReturn(userList);
 		replay(userRepository);
 		
-		assertFalse(signupService.notifyAdminIfUserIsNotValid(signup));
+		assertFalse(signupService.allUsersForIdentityAreValid(signup));
 		
 	}
 
@@ -115,7 +115,7 @@ public class SignupServiceTests {
 		expect(userRepository.findByIdentityPrincipal("principal")).andReturn(userList);
 		replay(userRepository);
 		
-		signupService.notifyAdminIfUserIsNotValid("principal");
+		signupService.notifyAdminIfUserIsNotValid(1, "principal");
 		assertTrue(calledNotifyAdminIfUserIsNotValid);
 	}
 	
@@ -179,11 +179,11 @@ public class SignupServiceTests {
 	}
 	
 	private SignupService signupService;
-	private LeadRepository leadRepository = EasyMock.createMock(LeadRepository.class);
-	private IdentityRepository identityRepository = EasyMock.createMock(IdentityRepository.class);
-	private SignupRepository signupRepository = EasyMock.createMock(SignupRepository.class);
-	private UserRepository userRepository = EasyMock.createMock(UserRepository.class);
-	private NotificationSender notificationSender = EasyMock.createMock(NotificationSender.class);
+	private LeadRepository leadRepository;
+	private IdentityRepository identityRepository;
+	private SignupRepository signupRepository;
+	private UserRepository userRepository;
+	private NotificationSender notificationSender;
 	private Boolean calledNotifyAdminIfUserIsNotValid = false;
 	
 	@Before
@@ -200,9 +200,9 @@ public class SignupServiceTests {
 		};
 		signupService = new SignupService(leadRepository, identityRepository, signupRepository, userRepository, notificationSender) {
 			@Override
-			public boolean notifyAdminIfUserIsNotValid(Signup signup) {
+			public boolean allUsersForIdentityAreValid(Signup signup) {
 				calledNotifyAdminIfUserIsNotValid = true;
-				return super.notifyAdminIfUserIsNotValid(signup);
+				return super.allUsersForIdentityAreValid(signup);
 			}
 		};
 	}

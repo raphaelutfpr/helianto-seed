@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 
 import org.helianto.core.config.HeliantoServiceConfig;
 import org.helianto.core.sender.NotificationSender;
+import org.helianto.qualifier.QualifierAdapterList;
 import org.helianto.sendgrid.config.SendGridConfig;
 import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.context.annotation.Bean;
@@ -128,6 +129,16 @@ public abstract class AbstractRootContextConfig extends WebMvcConfigurerAdapter 
         registry.addResourceHandler("/assets/**").addResourceLocations("classpath:/assets/").setCachePeriod(31556926);
         registry.addResourceHandler("/views/**").addResourceLocations("classpath:/views/").setCachePeriod(31556926);
 	}	                    
+	
+	/**
+	 * Subclasses must implement a qualifier adapter list to resolve network qualifiers.
+	 */
+	public abstract QualifierAdapterList networkQualifierAdapterList();
+	
+	/**
+	 * Subclasses must implement a qualifier adapter list to resolve user qualifiers.
+	 */
+	public abstract QualifierAdapterList userQualifierAdapterList();
 	
 	/**
 	 * Notification sender.

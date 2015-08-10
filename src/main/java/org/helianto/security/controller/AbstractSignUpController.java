@@ -58,7 +58,7 @@ public abstract class AbstractSignUpController
 	@RequestMapping(value={"/", ""}, method=RequestMethod.GET)
 	public ModelAndView getSignupPage(Model model, @RequestParam(defaultValue="1") Integer contextId
 			, @RequestParam(required=false) String principal, WebRequest request) {
-		if(signupService.notifyAdminIfUserIsNotValid(principal)){
+		if(signupService.notifyAdminIfUserIsNotValid(contextId, principal)){
 			return new ModelAndView("forward:/");
 		}
 		Signup signup = signupService.socialSignUpAttempt(contextId, request);
@@ -95,18 +95,22 @@ public abstract class AbstractSignUpController
 		if (ipAddress == null) {  
 			  ipAddress = request.getRemoteAddr();  
 		}
-
+		// TODO prevent double submission
+		signup.setToken(signupService.createToken());
 		signup = signupService.saveSignup(signup, ipAddress);
-		boolean userExists = signupService.notifyAdminIfUserIsNotValid(signup);
+		boolean userExists = signupService.allUsersForIdentityAreValid(signup);
 		model.addAttribute("userExists", userExists);
 		if (!userExists) {
-			return WELCOME_TEMPLATE;
+			model.addAttribute("sender", env.getProperty("iservport.sender.mail"));
+			model.addAttribute("emailSent", sendConfirmation(signup));
 		}
-		
-		model.addAttribute("sender", env.getProperty("iservport.sender.mail"));
-		model.addAttribute("emailSent", sendConfirmation(signup));
 		model.addAllAttributes(signup.createMapFromForm());
-		return "redirect:/";
+		return WELCOME_TEMPLATE;
+	}
+	
+	// TODO
+	public void resendConfirmation() {
+		
 	}
 	
 }

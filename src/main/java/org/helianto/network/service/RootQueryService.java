@@ -10,6 +10,8 @@ import org.helianto.core.internal.KeyNameAdapter;
 import org.helianto.core.internal.QualifierAdapter;
 import org.helianto.core.internal.SimpleCounter;
 import org.helianto.network.repository.RootRepository;
+import org.helianto.qualifier.QualifierAdapterList;
+import org.helianto.qualifier.AbstractQualifierAdapterList.NetworkKeyNameAdapter;
 import org.helianto.security.internal.UserAdapter;
 import org.helianto.security.repository.EntityStatsRepository;
 import org.springframework.data.domain.Page;
@@ -32,8 +34,8 @@ public class RootQueryService {
 	@Inject
 	private RootRepository rootRepository;
 
-	@Inject
-	private KeyNameAdapterArray keyNameAdapterArray;
+	@Inject @NetworkKeyNameAdapter 
+	private QualifierAdapterList networkQualifierAdapterList;
 
 	/**
 	 * List qualifiers.
@@ -41,8 +43,7 @@ public class RootQueryService {
 	 * @param entityId
 	 */
 	public List<QualifierAdapter> qualifier(int entityId) {
-		List<QualifierAdapter> qualifierList 
-			= QualifierAdapter.qualifierAdapterList(keyNameAdapterArray.values());
+		List<QualifierAdapter> qualifierList = networkQualifierAdapterList.getQualifierList();
 		qualifierCount(entityId, qualifierList);
 
 		return qualifierList;
@@ -103,21 +104,6 @@ public class RootQueryService {
 	public UserAdapter entity(int userId) {
 		Entity entity = rootRepository.findByUserId(userId);
 		return new UserAdapter(userId, entity);
-	}
-	
-	/**
-	 * Subclasses may override to provide custom key/name arrays.
-	 */
-	protected KeyNameAdapterArray getKeyNameAdapterArray() {
-		if (keyNameAdapterArray!=null && keyNameAdapterArray.values().length>0) {
-			return keyNameAdapterArray;
-		}
-		return new KeyNameAdapterArray() {
-			@Override
-			public KeyNameAdapter[] values() {
-				return InternalEntityType.values();
-			}
-		};
 	}
 	
 	/**

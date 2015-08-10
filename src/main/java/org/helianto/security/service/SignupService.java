@@ -87,46 +87,41 @@ public class SignupService {
 	 * 
 	 * @param signup
 	 */
-	public boolean notifyAdminIfUserIsNotValid(Signup signup) {
+	public boolean allUsersForIdentityAreValid(Signup signup) {
+		// TODO consider contextId (inside signup already) to search for users (below).
 		List<User> userList = userRepository.findByIdentityPrincipal(signup.getPrincipal());
 		
 		boolean isActive = userList!=null && userList.size()>0;
 		if (!isActive) {
-			logger.warn("Empty user list for {}.", signup.getPrincipal());
-			notificationSender.send(signup.getPrincipal(), signup.getFirstName(), signup.getLastName(), "Empty user list for identity attempting signup.");
-			return false;
+			return true;
 		}
 		
 		for (User user: userList) {
 			if (!user.isAccountNonLocked() || !user.isAccountNonExpired()) {
-				isActive = false;
-				break;
+				notificationSender.send(signup.getPrincipal(), signup.getFirstName(), signup.getLastName(), "Inactive user attempting signup.");
+				logger.warn("User {} inactive, notification sent", signup.getPrincipal());
+				return false;
 			}
 		}
 		
-		if (isActive) {
-			return true;
-		}
-		
-		notificationSender.send(signup.getPrincipal(), signup.getFirstName(), signup.getLastName(), "Inactive user attempting signup.");
-		logger.warn("User {} inactive, notification sent", signup.getPrincipal());
-		return false;
+		return true;
 	}
 	
 	/**
 	 * True if all existing users for the identity are valid, otherwise admin is notified, except if principal is empty.
 	 * 
+	 * @param contextId
 	 * @param principal
 	 */
-	public boolean notifyAdminIfUserIsNotValid(String principal) {
+	public boolean notifyAdminIfUserIsNotValid(Integer contextId, String principal) {
 		if (principal!=null && principal.length()>0) {
 			Identity identity = identityRepository.findByPrincipal(principal);
-			Signup signup = new Signup(1, principal);
+			Signup signup = new Signup(contextId, principal);
 			if (identity!=null) {
 				signup.setFirstName(identity.getIdentityFirstName());
 				
 			}
-			return notifyAdminIfUserIsNotValid(signup);
+			return allUsersForIdentityAreValid(signup);
 		}
 		return false;
 	}
@@ -154,13 +149,20 @@ public class SignupService {
 	 */
 	public Lead createLead(Integer id, String principal) {
 		Lead lead = new Lead(id, principal, new Date());
+		lead.setToken(createToken());
+		return leadRepository.saveAndFlush(lead);
+	}
+	
+	/**
+	 * Create token.
+	 */
+	public String createToken() {
 		UUID uuid = UUID.randomUUID();
 		String token = uuid.toString();
 		if (token.length()>36) {
     		token = token.substring(0, 36).trim();
 		}
-		lead.setToken(token);
-		return leadRepository.saveAndFlush(lead);
+		return token;
 	}
 	
 	/**

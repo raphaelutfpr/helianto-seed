@@ -38,19 +38,10 @@
     	<org.aspectj-version>1.8.1</org.aspectj-version>
  		<helianto.version>0.4.4-SNAPSHOT</helianto.version>
 		<org.slf4j.version>1.7.10</org.slf4j.version>
+		<logback.version>1.0.13</logback.version>
 	</properties>
 	
 	<dependencies>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>helianto-partner</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>helianto-document</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -70,13 +61,23 @@
   		<dependency>
 		    <groupId>ch.qos.logback</groupId>
 		    <artifactId>logback-classic</artifactId>
-		    <version>1.0.13</version>
+		    <version>${logback.version}</version>
 		</dependency>
 		
 		<!-- 
 		 ! Helianto
 		 ! -->
-			
+		<dependency>
+			<groupId>org.helianto</groupId>
+			<artifactId>helianto-partner</artifactId>
+			<version>${helianto.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.helianto</groupId>
+			<artifactId>helianto-document</artifactId>
+			<version>${helianto.version}</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.helianto</groupId>
 			<artifactId>helianto-sendgrid</artifactId>
