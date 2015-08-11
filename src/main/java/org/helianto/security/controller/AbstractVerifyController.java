@@ -113,7 +113,7 @@ public abstract class AbstractVerifyController
 		else {
 			model.addAttribute("userConfirmed", false);
 		}
-		return AbstractSignUpController.SIGN_UP;
+		return SignUpController.SIGN_UP;
 	}
 	
 	/**
@@ -179,7 +179,7 @@ public abstract class AbstractVerifyController
 			}
 		}
 		else{
-			return "redirect:"+AbstractSignUpController.SIGN_UP;
+			return "redirect:"+SignUpController.SIGN_UP;
 		}
 		return PWD_CREATE;
 	}
@@ -208,7 +208,7 @@ public abstract class AbstractVerifyController
 		createEntities(prototypes, identity);
 		model.addAttribute("passError", "false");
 		
-		return AbstractSignUpController.WELCOME_TEMPLATE;
+		return SignUpController.WELCOME_TEMPLATE;
 		
 	}
 	

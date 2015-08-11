@@ -81,6 +81,12 @@ var myMod = angular.module('app.services', ['ngResource'])
 				}
 			});
 			return json;
+		},
+		verifyPassword: function(pass, cpass){
+			if(pass==null || pass=='undefined' || cpass==null || cpass=='undefined'){
+				return false;
+			}
+			return pass === cpass;
 		}
 	}
 })

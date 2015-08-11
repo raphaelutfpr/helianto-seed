@@ -5,9 +5,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.helianto.core.domain.Signup;
+import org.helianto.core.sender.UserConfirmationSender;
 import org.helianto.security.service.SignupService;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,8 +25,9 @@ import org.springframework.web.servlet.ModelAndView;
  * 
  * @author mauriciofernandesdecastro
  */
+@Controller
 @RequestMapping(value="/signup")
-public abstract class AbstractSignUpController 
+public class SignUpController 
 	extends AbstractCryptoController
 {
 
@@ -40,12 +43,20 @@ public abstract class AbstractSignUpController
 	@Inject
 	private SignupService signupService;
 
+	@Inject 
+	private UserConfirmationSender userConfirmationSender;
+	
 	/**
 	 * Send user confirmation e-mail.
 	 * 
-	 * @param identity
+	 * @param signup
 	 */
-	protected abstract String sendConfirmation(Signup signup);
+	public String sendConfirmation(Signup signup) {
+		if (userConfirmationSender.send(signup.getPrincipal(), signup.getFirstName(), signup.getLastName(), "", signup.getToken())) {
+			return "true";
+		}
+		return "false";
+	}
 	
 	/**
 	 * Signup request.
