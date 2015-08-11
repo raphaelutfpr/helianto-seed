@@ -4,10 +4,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.helianto.core.internal.KeyNameAdapter;
 import org.helianto.core.internal.QualifierAdapter;
 import org.helianto.core.internal.SimpleCounter;
-import org.helianto.qualifier.AbstractQualifierAdapterList.UserKeyNameAdapter;
-import org.helianto.qualifier.QualifierAdapterList;
 import org.helianto.user.domain.User;
 import org.helianto.user.repository.UserRepository;
 import org.helianto.user.repository.UserStatsRepository;
@@ -15,14 +14,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.stereotype.Service;
 
 /**
 * User query service.
 * 
 * @author mauriciofernandesdecastro
 */
-@Service
 public class UserQueryService {
 
 	@Inject 
@@ -31,8 +28,17 @@ public class UserQueryService {
 	@Inject 
 	protected UserStatsRepository userStatsRepository;
 	
-	@Inject @UserKeyNameAdapter 
-	private QualifierAdapterList userQualifierAdapterList;
+	private KeyNameAdapter[] keyNameAdapter;
+	
+	/**
+	 * KeyNameAdapter array constructor.
+	 * 
+	 * @param keyNameAdapter
+	 */
+	public UserQueryService(KeyNameAdapter[] keyNameAdapter) {
+		super();
+		this.keyNameAdapter = keyNameAdapter;
+	}
 
 	/**
 	 * List qualifiers.
@@ -40,7 +46,8 @@ public class UserQueryService {
 	 * @param userAuthentication
 	 */
 	public List<QualifierAdapter> qualifierList(int entityId) {
-		List<QualifierAdapter> qualifierList = userQualifierAdapterList.getQualifierList();
+		List<QualifierAdapter> qualifierList = 
+				QualifierAdapter.qualifierAdapterList(keyNameAdapter);
 		qualifierCount(entityId, qualifierList);
 		return qualifierList;
 	}

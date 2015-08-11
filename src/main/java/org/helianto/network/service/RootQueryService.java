@@ -10,22 +10,18 @@ import org.helianto.core.internal.KeyNameAdapter;
 import org.helianto.core.internal.QualifierAdapter;
 import org.helianto.core.internal.SimpleCounter;
 import org.helianto.network.repository.RootRepository;
-import org.helianto.qualifier.QualifierAdapterList;
-import org.helianto.qualifier.AbstractQualifierAdapterList.NetworkKeyNameAdapter;
 import org.helianto.security.internal.UserAdapter;
 import org.helianto.security.repository.EntityStatsRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.stereotype.Service;
 
 /**
  * Entity network query service.
  * 
  * @author mauriciofernandesdecastro
  */
-@Service
 public class RootQueryService {
 	
 	@Inject
@@ -34,8 +30,17 @@ public class RootQueryService {
 	@Inject
 	private RootRepository rootRepository;
 
-	@Inject @NetworkKeyNameAdapter 
-	private QualifierAdapterList networkQualifierAdapterList;
+	private KeyNameAdapter[] keyNameAdapter;
+	
+	/**
+	 * KeyNameAdapter array constructor.
+	 * 
+	 * @param keyNameAdapter
+	 */
+	public RootQueryService(KeyNameAdapter[] keyNameAdapter) {
+		super();
+		this.keyNameAdapter = keyNameAdapter;
+	}
 
 	/**
 	 * List qualifiers.
@@ -43,7 +48,8 @@ public class RootQueryService {
 	 * @param entityId
 	 */
 	public List<QualifierAdapter> qualifier(int entityId) {
-		List<QualifierAdapter> qualifierList = networkQualifierAdapterList.getQualifierList();
+		List<QualifierAdapter> qualifierList = 
+				QualifierAdapter.qualifierAdapterList(keyNameAdapter);
 		qualifierCount(entityId, qualifierList);
 
 		return qualifierList;

@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.inject.Inject;
+
 import org.helianto.core.domain.Identity;
 import org.helianto.core.domain.Lead;
 import org.helianto.core.domain.Signup;
@@ -52,6 +54,7 @@ public class SignupService {
 	 * @param userRepository
 	 * @param notificationSender
 	 */
+	@Inject
 	public SignupService(LeadRepository leadRepository,
 			IdentityRepository identityRepository,
 			SignupRepository signupRepository, UserRepository userRepository,

@@ -1,4 +1,4 @@
-package org.helianto.config;
+package org.helianto.seed;
 
 import java.util.EnumSet;
 

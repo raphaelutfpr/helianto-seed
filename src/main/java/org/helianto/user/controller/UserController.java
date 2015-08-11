@@ -4,9 +4,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.helianto.config.PageDecorator;
 import org.helianto.core.internal.QualifierAdapter;
 import org.helianto.security.internal.UserAuthentication;
+import org.helianto.seed.PageDecorator;
 import org.helianto.user.domain.User;
 import org.helianto.user.service.UserCommandService;
 import org.helianto.user.service.UserQueryService;

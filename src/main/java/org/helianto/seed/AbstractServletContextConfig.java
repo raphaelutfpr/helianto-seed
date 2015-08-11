@@ -1,4 +1,4 @@
-package org.helianto.config;
+package org.helianto.seed;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

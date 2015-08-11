@@ -37,26 +37,25 @@ public class RootCommandService {
 	@Inject 
 	private UserAuthorityRepository userAuthorityRepository;
 	
-	/**
-	 * Item found.
-	 * 
-	 * @param model
-	 * @param terget
-	 * @deprecated
-	 */
-	public String view(UserAuthentication userAuthentication, Model model, Entity entityTarget, User target) {
-		logger.debug("Found user id {} for entity {}.", target.getId(), entityTarget);
-		if (target!=null) {
-			
-			model.addAttribute("root", target);
-			model.addAttribute("rootEntity", entityTarget);
-			// não possui agregador;
-			model.addAttribute("qualifier", entityTarget.getEntityType());
-			
-		}
-		return "frame";
-	}
-	
+//	/**
+//	 * Item found.
+//	 * 
+//	 * @param model
+//	 * @param terget
+//	 * @deprecated
+//	 */
+//	public String view(UserAuthentication userAuthentication, Model model, Entity entityTarget, User target) {
+//		logger.debug("Found user id {} for entity {}.", target.getId(), entityTarget);
+//		if (target!=null) {
+//			
+//			model.addAttribute("root", target);
+//			model.addAttribute("rootEntity", entityTarget);
+//			model.addAttribute("qualifier", entityTarget.getEntityType());
+//			
+//		}
+//		return "frame";
+//	}
+//	
 	/**
 	 * New authorization.
 	 * 

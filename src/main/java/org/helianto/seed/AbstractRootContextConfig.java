@@ -1,9 +1,4 @@
-package org.helianto.config;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package org.helianto.seed;
 
 import javax.inject.Inject;
 import javax.naming.NamingException;
@@ -12,8 +7,11 @@ import javax.sql.DataSource;
 
 import org.helianto.core.config.HeliantoServiceConfig;
 import org.helianto.core.sender.NotificationSender;
-import org.helianto.qualifier.QualifierAdapterList;
+import org.helianto.network.service.RootQueryService;
+import org.helianto.network.service.SimpleNetworkKeyName;
 import org.helianto.sendgrid.config.SendGridConfig;
+import org.helianto.user.service.SimpleUserKeyName;
+import org.helianto.user.service.UserQueryService;
 import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -131,16 +129,6 @@ public abstract class AbstractRootContextConfig extends WebMvcConfigurerAdapter 
 	}	                    
 	
 	/**
-	 * Subclasses must implement a qualifier adapter list to resolve network qualifiers.
-	 */
-	public abstract QualifierAdapterList networkQualifierAdapterList();
-	
-	/**
-	 * Subclasses must implement a qualifier adapter list to resolve user qualifiers.
-	 */
-	public abstract QualifierAdapterList userQualifierAdapterList();
-	
-	/**
 	 * Notification sender.
 	 */
 	@Bean
@@ -173,4 +161,20 @@ public abstract class AbstractRootContextConfig extends WebMvcConfigurerAdapter 
 		return new CookieLocaleResolver();
 	}
 	
+	/**
+	 * Subclasses may override to create custom qualifiers.
+	 */
+	@Bean
+	public RootQueryService rootQueryService() {
+		return new RootQueryService(SimpleNetworkKeyName.values());
+	}
+
+	/**
+	 * Subclasses may override to create custom qualifiers.
+	 */
+	@Bean
+	public UserQueryService userQueryService() {
+		return new UserQueryService(SimpleUserKeyName.values());
+	}
+
 }
