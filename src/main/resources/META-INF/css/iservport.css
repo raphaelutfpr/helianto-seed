@@ -1,0 +1,235 @@
+@media screen and (min-width:480px) {
+	#unauth .container-small {
+		margin: 50px auto 100px;
+		width: 390px
+	}
+}
+
+@media screen and (min-width:768px) {
+	.container {
+		padding: 0
+	}
+	.navbar a.logo {
+		float: left
+	}
+	.navbar .top-nav {
+		float: right;
+		margin: 0
+	}
+	.navbar .top-nav>li:last-child {
+		padding-right: 0
+	}
+	.site-grid .site-item {
+		width: 229px;
+		height: 242px;
+		margin: 0 0 20px 20px;
+		float: left
+	}
+	.site-grid .site-item:nth-child(3n+1) {
+		margin-left: 0
+	}
+	.tutorials .has-icon {
+		width: 33.33%
+	}
+	.footer {
+		text-align: left
+	}
+	.footer .logo {
+		float: left
+	}
+	.footer ul {
+		float: left;
+		margin: 2px 0 0 10px;
+		padding: 0
+	}
+	.footer ul li {
+		padding: 7px 12px
+	}
+	.footer ul li.bullet {
+		display: inline-block
+	}
+	.footer iframe {
+		float: right;
+		margin: 5px 0 0 20px
+	}
+	#unauth .container-small {
+		margin: 50px auto 100px;
+		width: 490px
+	}
+	#unauth .footer ul {
+		float: none;
+		margin: 0
+	}
+	#unauth .footer .rights {
+		clear: both;
+		padding-top: 10px
+	}
+}
+
+@media screen and (min-width:992px) {
+	#unauth .container-small {
+		margin: 50px auto 100px
+	}
+	.site-grid .site-item {
+		margin: 0 0 24px 20px;
+		width: 300px
+	}
+	.menus {
+		float: left;
+		width: 220px
+	}
+	.side-menu {
+		float: left;
+		width: 220px;
+		background-color: #9e9e9e;
+		padding: 10px 0;
+		border-radius: 3px;
+		box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, .1), inset 0 0 0 1px
+			rgba(0, 0, 0, .06), 0 3px 2px -1px rgba(0, 0, 0, .05), inset 0 -14px
+			8px -10px rgba(0, 0, 0, .04)
+	}
+	.side-menu.inner-menu {
+		float: none;
+		width: 100%
+	}
+	.side-menu .menu-item {
+		display: block;
+		position: relative;
+		padding: 16px 0 16px 60px;
+		margin: 0 1px;
+		font-size: 16px;
+		text-shadow: 0 -1px 0 #858585;
+		border-top: 1px solid #ababab;
+		border-bottom: 1px solid #919191;
+		border-radius: 0
+	}
+	.side-menu .menu-item.active {
+		border-top: 1px solid #6b6b6b;
+		border-bottom: 1px solid #787878;
+		border-left: 1px solid #7d7d7d;
+		border-right: 1px solid #7d7d7d;
+		margin: 0
+	}
+	.side-menu .menu-item.active:first-child {
+		border-top: 1px solid #787878
+	}
+	.side-menu .menu-item.active:last-child {
+		border-bottom: 1px solid #787878
+	}
+	.side-menu .menu-item:first-child {
+		border-top: 1px solid transparent
+	}
+	.side-menu .menu-item:last-child {
+		border-bottom: 1px solid transparent
+	}
+	.side-menu .menu-item:last-child .menu-icon {
+		display: inline-block;
+		width: 10px;
+		height: 10px;
+		color: #00f
+	}
+	.side-menu .menu-item>i {
+		position: absolute;
+		right: 170px;
+		top: 17px
+	}
+	.main-content {
+		width: 700px;
+		min-height: 452px;
+		float: right
+	}
+	.main-content .plan.well h3 {
+		font-size: 14px
+	}
+}
+
+@media ( min-width :1200px) {
+	#unauth .container-small {
+		margin: 50px auto 100px
+	}
+	.main-content {
+		width: 930px
+	}
+	.site-grid .site-item {
+		width: 376px
+	}
+}
+
+@media print
+{    
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+}
+
+#unauth .well-big form .field {
+	padding-top: 10px;
+}
+
+form .field {
+	padding: 0 0 30px;
+}
+
+/**
+ * Estilos para o fundo (background) em eventos
+ *
+ * late -> danger background f2dede (red)
+ * warn -> warning background fcf8e3 (yellow)
+ * none -> default background d7d7d7 (light grey)
+ */
+
+.iserv-info-section {
+	background-color: lightsteelblue;
+}
+
+.iserv-icon-danger {
+	background-color: #f2dede;
+}
+
+.iserv-icon-warning {
+	background-color: #fcf8e3;
+}
+
+.iserv-icon-default {
+	background-color: #f7f7f9;
+}
+
+/**
+ * @deprecated
+.fa-2 {
+  font-size: 2em;
+}
+.fa-3 {
+  font-size: 3em;
+}
+.fa-4 {
+  font-size: 4em;
+}
+.fa-5 {
+  font-size: 5em;
+}
+.fa-6 {
+  font-size: 6em;
+}
+.fa-10 {
+  font-size: 10em;
+}
+.fa-15 {
+  font-size: 15em;
+}
+.fa-20 {
+  font-size: 20em;
+}
+.fa-1,.fa-2,.fa-3,.fa-4,.fa-5,.fa-6 {
+  margin-right: 0.07142857em;
+}
+
+*/
+
+/**
+ * Estilos para adaptar bootstrap 
+ */
+.i-align-top {
+	margin-top: 0px;
+}
