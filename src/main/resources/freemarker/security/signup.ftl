@@ -63,7 +63,9 @@
 			<#--
 			 # Email inválido
 			 #-->
-			<#if emailError?? && emailError="invalid" ><div class="alert alert-danger" role="alert"><@spring.message "label.email.invalid" /> </div></#if>
+			<#if emailError?? && emailError="invalid" ><div class="alert alert-danger" role="alert">
+				<@spring.message "label.email.invalid" /> </div>
+			</#if>
 
 			<#if email??>
 				<type="email" class="form-control" placeholder="Email" required="true" id="email">
@@ -74,7 +76,8 @@
 							data-ng-model="principal" data-ng-keyUp="emailTester()"
 							data-ng-blur="emailTester();saveEmail(principal)"
 							value="${principal!''}"
-							placeholder="E-mail" class="form-control">		
+							placeholder="E-mail" class="form-control">
+									
 						  <span class="input-group-addon" data-ng-show="emailOk">
 						  <i class="fa fa-check" style="color:green;" ></i>
 						  </span>
