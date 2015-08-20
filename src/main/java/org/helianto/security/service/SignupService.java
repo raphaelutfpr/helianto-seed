@@ -175,15 +175,17 @@ public class SignupService {
 	 * @param ipAddress
 	 */
 	public Signup saveSignup(Signup signup, String ipAddress) {
+		System.err.println("saveSignup: " + signup.getDomain());
 		Identity identity = identityRepository.findByPrincipal(signup.getPrincipal());
 		
 		if (identity==null) {
 			identity = identityRepository.saveAndFlush(signup.createIdentityFromForm());
 			logger.info("New identity {} created", identity.getPrincipal());
+			System.err.println("New identity {} created " +  identity.getPrincipal());
 		}
 
+		System.err.println("TAM: " + signupRepository.findAll().size());
 		// TODO save the ipAddress
-		
 		return signupRepository.saveAndFlush(signup);
 	}
 	

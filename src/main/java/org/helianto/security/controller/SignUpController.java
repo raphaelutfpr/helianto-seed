@@ -73,6 +73,7 @@ public class SignUpController
 			return new ModelAndView("forward:/");
 		}
 		Signup signup = signupService.socialSignUpAttempt(contextId, request);
+		
 		return new ModelAndView(SIGN_UP_TEMPLATE, "form", signup);
 	}
 	
@@ -101,7 +102,6 @@ public class SignUpController
 	 */
 	@RequestMapping(value={"/", ""}, method= RequestMethod.POST)
 	public String postSignupPage(Model model, @Valid Signup signup, BindingResult error, HttpServletRequest request) {
-		
 		String ipAddress = request.getHeader("X-FORWARDED-FOR");  
 		if (ipAddress == null) {  
 			  ipAddress = request.getRemoteAddr();  
