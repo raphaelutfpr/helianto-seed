@@ -52,6 +52,11 @@ public class SignUpController
 	 * @param signup
 	 */
 	public String sendConfirmation(Signup signup) {
+		System.err.println("Email: " + signup.getPrincipal() +
+				"\n F Name: " + signup.getFirstName() +
+				"\n L Name: " + signup.getLastName() + 
+				"\nToken: " + signup.getToken());
+		
 		if (userConfirmationSender.send(signup.getPrincipal(), signup.getFirstName(), signup.getLastName(), "", signup.getToken())) {
 			return "true";
 		}
@@ -111,8 +116,10 @@ public class SignUpController
 		signup = signupService.saveSignup(signup, ipAddress);
 		boolean userExists = signupService.allUsersForIdentityAreValid(signup);
 		model.addAttribute("userExists", userExists);
-		if (!userExists) {
+
+		if (userExists) {
 			model.addAttribute("sender", env.getProperty("iservport.sender.mail"));
+			System.err.println("EMAILO: " + signup.getPrincipal());
 			model.addAttribute("emailSent", sendConfirmation(signup));
 		}
 		model.addAllAttributes(signup.createMapFromForm());

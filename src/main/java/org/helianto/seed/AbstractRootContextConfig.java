@@ -82,6 +82,7 @@ public abstract class AbstractRootContextConfig extends WebMvcConfigurerAdapter 
 	@Bean
 	public Object jndiObjectFactoryBean() throws IllegalArgumentException, NamingException {
 		JndiObjectFactoryBean jndiFactory = new JndiObjectFactoryBean();
+		System.err.println("jndiObjectFactoryBean()");
 		jndiFactory.setJndiName("jdbc/iservportDB");
 		jndiFactory.setResourceRef(true);
 		jndiFactory.afterPropertiesSet();
