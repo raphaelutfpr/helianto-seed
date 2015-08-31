@@ -30,7 +30,7 @@ public class UserConfirmationSender
 	 */
 	@Inject
 	public UserConfirmationSender(Environment env) {
-		super(env.getProperty("noReplyEmail"), env.getProperty("rootFullName"), "userConfirmation");
+		super(env.getProperty("winnect.noReplyEmail"), env.getProperty("winnect.rootFullName"), "userConfirmation");
 	}
 	
 	protected String getConfirmationUri(String... params) {

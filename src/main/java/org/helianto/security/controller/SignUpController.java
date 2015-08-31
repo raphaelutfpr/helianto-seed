@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,7 +58,7 @@ public class SignUpController
 				"\n L Name: " + signup.getLastName() + 
 				"\nToken: " + signup.getToken());
 		
-		if (userConfirmationSender.send(signup.getPrincipal(), signup.getFirstName(), signup.getLastName(), "", signup.getToken())) {
+		if (userConfirmationSender.send(signup.getPrincipal(), signup.getFirstName(), signup.getLastName(), "Email Confirmação", signup.getToken(), "")) {
 			return "true";
 		}
 		return "false";
@@ -97,6 +98,19 @@ public class SignUpController
 		return "{\"exists\": false}";
 	}
 	
+
+	/**
+	 * Check if email exists.
+	 * 
+	 */
+	@RequestMapping(value={"/", ""}, method=RequestMethod.GET, params="checkEmail")
+	@ResponseBody
+	public boolean checkMail(@RequestBody Signup form) {
+		System.err.println("CHECK EMAIL" + form.getPrincipal());
+		
+		return true;
+	}
+	
 	/**
 	 * Signup submission
 	 * 
@@ -115,11 +129,11 @@ public class SignUpController
 		signup.setToken(signupService.createToken());
 		signup = signupService.saveSignup(signup, ipAddress);
 		boolean userExists = signupService.allUsersForIdentityAreValid(signup);
+		System.err.println("userExists: " + userExists);
 		model.addAttribute("userExists", userExists);
 
 		if (userExists) {
 			model.addAttribute("sender", env.getProperty("iservport.sender.mail"));
-			System.err.println("EMAILO: " + signup.getPrincipal());
 			model.addAttribute("emailSent", sendConfirmation(signup));
 		}
 		model.addAllAttributes(signup.createMapFromForm());
