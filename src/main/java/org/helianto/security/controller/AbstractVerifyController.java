@@ -31,6 +31,7 @@ import org.helianto.install.service.EntityInstallStrategy;
 import org.helianto.install.service.UserInstallService;
 import org.helianto.security.domain.IdentitySecret;
 import org.helianto.security.internal.UserDetailsAdapter;
+import org.helianto.security.repository.SignupTmpRepository;
 import org.helianto.security.service.AuthorizationChecker;
 import org.helianto.security.util.SignInUtils;
 import org.helianto.user.domain.User;
@@ -38,6 +39,7 @@ import org.joda.time.DateMidnight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.social.connect.web.ProviderSignInUtils;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,7 +52,7 @@ import org.springframework.web.context.request.WebRequest;
  * 
  * @author mauriciofernandesdecastro
  */
-@RequestMapping("/verify")
+
 public abstract class AbstractVerifyController
 	extends AbstractCryptoController
 {
@@ -84,6 +86,9 @@ public abstract class AbstractVerifyController
 	
 	@Inject
 	private ProviderSignInUtils providerSignInUtils;
+	
+	@Inject
+	private SignupTmpRepository signupTmpRepository;
 
 	/**
 	 * Create = true if identity not yet exists.
@@ -107,6 +112,7 @@ public abstract class AbstractVerifyController
 	public String getVerificationPage(Model model, @RequestParam String confirmationToken) {
 		System.err.println("getVerificationPage");
 		int identityId = findPreviousSignupAttempt(confirmationToken, 5);
+		System.err.println("identityId: " + identityId);
 		if (identityId!=0) {
 			Identity  identity = identityRepository.findOne(identityId);
 			return createPassword(model, identity);
@@ -124,13 +130,16 @@ public abstract class AbstractVerifyController
 	 * @param expirationLimit
 	 */
 	protected int findPreviousSignupAttempt(String confirmationToken, int expirationLimit) {
-		Lead lead = leadRepository.findByToken(confirmationToken);
-		if (lead!=null) {
-			if (expirationLimit>0 && lead.getIssueDate()!=null) {
-				DateMidnight expirationDate = new DateMidnight(lead.getIssueDate()).plusDays(expirationLimit + 1);
+		Signup signup = signupTmpRepository.findByToken(confirmationToken);
+		System.err.println("signup: " + signup);
+		if (signup!=null) {
+			if (expirationLimit>0 && signup.getIssueDate()!=null) {
+				DateMidnight expirationDate = new DateMidnight(signup.getIssueDate()).plusDays(expirationLimit + 1);
+				System.err.println("expirationDate: " + expirationDate);
 				logger.debug("Previous signup attempt valid to {} ", expirationDate);
-				if (!expirationDate.isAfterNow()) {
-					return identityRepository.findByPrincipal(lead.getPrincipal()).getId();
+				if (expirationDate.isAfterNow()) {
+					System.err.println("expirationDate.isAfterNow()");
+					return identityRepository.findByPrincipal(signup.getPrincipal()).getId();
 				}
 			}
 		}

@@ -74,7 +74,6 @@ public class SignUpController
 			return new ModelAndView("forward:/");
 		}
 		Signup signup = signupService.socialSignUpAttempt(contextId, request);
-		
 		return new ModelAndView(SIGN_UP_TEMPLATE, "form", signup);
 	}
 	

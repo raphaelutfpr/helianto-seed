@@ -35,12 +35,12 @@ public class UserConfirmationSender
 	}
 	
 	protected String getConfirmationUri(String... params) {
-		return getApiUrl()+"/signup/verify?token=x";
+		return getApiUrl()+"/signup/app/verify?token=x";
 	}
 	
 	@Override
 	protected String getConfirmationUri(String confirmationToken) {
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getApiUrl()+"/verify").queryParam("confirmationToken", confirmationToken);
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getApiUrl()+"/app/verify").queryParam("confirmationToken", confirmationToken);
 		return builder.build().encode().toUri().toString();
 	}
 

@@ -132,6 +132,7 @@ public class SignupService {
 	 * @param principal
 	 */
 	public boolean notifyAdminIfUserIsNotValid(Integer contextId, String principal) {
+		System.err.println("Principal: " + principal);
 		if (principal!=null && principal.length()>0) {
 			Identity identity = identityRepository.findByPrincipal(principal);
 			Signup signup = new Signup(contextId, principal);
@@ -139,6 +140,7 @@ public class SignupService {
 				signup.setFirstName(identity.getIdentityFirstName());
 				
 			}
+			System.err.println(allUsersForIdentityAreValid(signup));
 			return allUsersForIdentityAreValid(signup);
 		}
 		return false;
