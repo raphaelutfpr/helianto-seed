@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * Send confirmation e-mail.
@@ -35,6 +36,12 @@ public class UserConfirmationSender
 	
 	protected String getConfirmationUri(String... params) {
 		return getApiUrl()+"/signup/verify?token=x";
+	}
+	
+	@Override
+	protected String getConfirmationUri(String confirmationToken) {
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getApiUrl()+"/verify").queryParam("confirmationToken", confirmationToken);
+		return builder.build().encode().toUri().toString();
 	}
 
 }

@@ -53,12 +53,7 @@ public class SignUpController
 	 * @param signup
 	 */
 	public String sendConfirmation(Signup signup) {
-		System.err.println("Email: " + signup.getPrincipal() +
-				"\n F Name: " + signup.getFirstName() +
-				"\n L Name: " + signup.getLastName() + 
-				"\nToken: " + signup.getToken());
-		
-		if (userConfirmationSender.send(signup.getPrincipal(), signup.getFirstName(), signup.getLastName(), "Email Confirmação", signup.getToken(), "")) {
+		if (userConfirmationSender.send(signup.getPrincipal(), signup.getFirstName(), signup.getLastName(), "Email Confirmação", "confirmationToken", signup.getToken())) {
 			return "true";
 		}
 		return "false";
@@ -103,12 +98,10 @@ public class SignUpController
 	 * Check if email exists.
 	 * 
 	 */
-	@RequestMapping(value={"/", ""}, method=RequestMethod.GET, params="checkEmail")
+	@RequestMapping(value={"/", ""}, method=RequestMethod.POST, params="emailChecked", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public boolean checkMail(@RequestBody Signup form) {
-		System.err.println("CHECK EMAIL" + form.getPrincipal());
-		
-		return true;
+	public String checkMail(@RequestBody Signup form) {
+		return "{\"notExists\":" + signupService.searchPrincipal(form) + "}";
 	}
 	
 	/**
@@ -129,7 +122,6 @@ public class SignUpController
 		signup.setToken(signupService.createToken());
 		signup = signupService.saveSignup(signup, ipAddress);
 		boolean userExists = signupService.allUsersForIdentityAreValid(signup);
-		System.err.println("userExists: " + userExists);
 		model.addAttribute("userExists", userExists);
 
 		if (userExists) {

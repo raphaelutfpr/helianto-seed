@@ -105,6 +105,7 @@ public abstract class AbstractVerifyController
 	 */
 	@RequestMapping(value={"/", ""}, method= RequestMethod.GET, params={"confirmationToken"})
 	public String getVerificationPage(Model model, @RequestParam String confirmationToken) {
+		System.err.println("getVerificationPage");
 		int identityId = findPreviousSignupAttempt(confirmationToken, 5);
 		if (identityId!=0) {
 			Identity  identity = identityRepository.findOne(identityId);
