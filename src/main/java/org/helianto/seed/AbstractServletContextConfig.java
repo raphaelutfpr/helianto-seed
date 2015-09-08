@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
+import javax.inject.Inject;
+
 import org.helianto.security.resolver.CurrentUserHandlerMethodArgumentResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -26,8 +28,9 @@ import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import freemarker.template.TemplateException;
 
 /**
  * Configuracao Java.
@@ -38,6 +41,8 @@ public abstract class AbstractServletContextConfig extends WebMvcConfigurerAdapt
 
 	public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 	
+	@Inject
+	private ObjectMapper mapper;
 	
 	@Bean 
 	public CurrentUserHandlerMethodArgumentResolver currentUserHandlerMethodArgumentResolver() {
@@ -133,8 +138,6 @@ public abstract class AbstractServletContextConfig extends WebMvcConfigurerAdapt
 	@Bean
 	public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
 		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		converter.setObjectMapper(mapper);
 		converter.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON,APPLICATION_JSON_UTF8));
 		return converter;
