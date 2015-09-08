@@ -115,24 +115,6 @@ public class MultiHttpSecurityConfig
         }
     }
 
-	/**
-	 * API configuration class.
-	 * 
-	 * @author mauriciofernandesdecastro
-	 */
-    @Configuration
-    @Order(3)                                                        
-    public static class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
-        protected void configure(HttpSecurity http) throws Exception {
-            http
-                .antMatcher("/api/**")
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().authorizeRequests().anyRequest().hasRole("USER")
-                .and().httpBasic()
-                .and().csrf().disable();
-        }
-    }
-
     /**
      * Web configuration class.
      * 
