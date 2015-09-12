@@ -193,7 +193,8 @@ public class SignupServiceTests {
 		signupRepository = EasyMock.createMock(SignupRepository.class);
 		userRepository = EasyMock.createMock(UserRepository.class);
 		notificationSender = new NotificationSender() {
-			@Override public boolean send(String recipientEmail, String recipientFirstName, String recipientLastName
+			@Override 
+			public boolean send(String recipientEmail, String recipientFirstName, String recipientLastName
 					, String subject, String... params) {
 				return true;
 			}

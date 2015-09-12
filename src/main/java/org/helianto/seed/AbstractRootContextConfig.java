@@ -21,7 +21,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 
 /**
- * Basic Java configuration.
+ * Basic Java configuration. 
  * 
  * @author mauriciofernandesdecastro
  */

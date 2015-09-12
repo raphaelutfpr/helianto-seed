@@ -53,5 +53,15 @@ public class AbstractCryptoController {
 		return identityCrypto.createIdentitySecret(identity, password, false);
 	}
 	
+	/**
+	 * Muda a senha de uma identidade.
+	 * 
+	 * @param principal
+	 * @param password
+	 */
+	public IdentitySecret changeIdentitySecret(String principal, String password){
+		return identityCrypto.changeIdentitySecret(principal, password);
+	}
+	
 
 }

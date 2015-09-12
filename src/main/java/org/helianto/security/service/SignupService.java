@@ -84,7 +84,22 @@ public class SignupService {
 		}
 		return new Signup(contextId, "");
 	}
-
+ 
+	/**
+	 * Verify if email exists
+	 * 
+	 * @param signup
+	 * */
+	public boolean searchPrincipal(Signup signup){
+		List<User> userList = userRepository.findByIdentityPrincipal(signup.getPrincipal());
+		Identity identity = identityRepository.findByPrincipal(signup.getPrincipal());
+		
+		if(identity == null && userList.size()==0){ // se o email não exisite, pode inseri-lom entao retorna true
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * True if all existing users for the identity are valid, otherwise admin is notified.
 	 * 
@@ -181,9 +196,7 @@ public class SignupService {
 			identity = identityRepository.saveAndFlush(signup.createIdentityFromForm());
 			logger.info("New identity {} created", identity.getPrincipal());
 		}
-
 		// TODO save the ipAddress
-		
 		return signupRepository.saveAndFlush(signup);
 	}
 	
