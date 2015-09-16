@@ -12,10 +12,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jndi.JndiObjectFactoryBean;
-import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 
@@ -36,12 +37,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
     basePackages={"org.helianto.*.repository"})
 public abstract class AbstractRootContextConfig extends AbstractContextConfig {
 	
-	/**
-	 * Override to set JNDI name.
-	 */
-	protected String getJndiName() {
-		return "jdbc/iservportDB";
-	}
+	@Inject
+	protected Environment env;
 	
 	/**
 	 * Override to set packages to scan.
@@ -50,51 +47,39 @@ public abstract class AbstractRootContextConfig extends AbstractContextConfig {
 		return new String[] {"org.helianto.*.domain"};
 	}
 	
-	@Inject
-	private DataSource dataSource;
-	
-	@Inject
-	private JpaVendorAdapter vendorAdapter;
-	
 	/**
-	 * JNDI factory.
-	 * 
-	 * @throws IllegalArgumentException
-	 * @throws NamingException
-	 */
-	@Bean
-	public Object jndiObjectFactoryBean() throws IllegalArgumentException, NamingException {
-		JndiObjectFactoryBean jndiFactory = new JndiObjectFactoryBean();
-		jndiFactory.setJndiName(getJndiName());
-		jndiFactory.setResourceRef(true);
-		jndiFactory.afterPropertiesSet();
-		return jndiFactory.getObject();
-	}
-	
-	/**
-	 * Substitui a configuração original do <code>EntityManagerFactory</code>
-	 * para incluir novos pacotes onde pesquisar por entidades persistentes.
+	 * Entity manager factory.
 	 */
 	@Bean 
 	public EntityManagerFactory entityManagerFactory() {
+		HibernateJpaVendorAdapter vendor = new HibernateJpaVendorAdapter();
+		vendor.setGenerateDdl(env.getProperty("helianto.sql.generateDdl", Boolean.class, Boolean.TRUE));
+
 		LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
-		bean.setDataSource(dataSource);
+		bean.setDataSource(dataSource());
 		bean.setPackagesToScan(getPacakgesToScan());
-		bean.setJpaVendorAdapter(vendorAdapter);
+		bean.setJpaVendorAdapter(vendor);
 		bean.setPersistenceProvider(new HibernatePersistence());
 		bean.afterPropertiesSet();
         return bean.getObject();
 	}
 	
 	/**
-	 * JNDI data source.
+	 * Simple data source.
 	 * 
 	 * @throws NamingException 
 	 * @throws IllegalArgumentException 
 	 */
 	@Bean
-	public DataSource dataSource() throws IllegalArgumentException, NamingException {
-		return (DataSource) jndiObjectFactoryBean();
+	public DataSource dataSource() throws IllegalArgumentException {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        
+        dataSource.setDriverClassName(env.getRequiredProperty("helianto.db.driver"));
+        dataSource.setUrl(env.getRequiredProperty("helianto.db.url"));
+        dataSource.setUsername(env.getRequiredProperty("helianto.db.username"));
+        dataSource.setPassword(env.getRequiredProperty("helianto.db.password"));
+         
+        return dataSource;
 	}
 	
 }
