@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.helianto</groupId>
 		<artifactId>helianto</artifactId>
-		<version>0.4.4-SNAPSHOT</version>
+		<version>0.4.4-RELEASE</version>
 	</parent>
 	<artifactId>helianto-seed</artifactId>
 	
@@ -32,38 +32,12 @@
 	<properties>
 	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.test.failure.ignore>false</maven.test.failure.ignore>
-		<spring-security.version>3.2.3.RELEASE</spring-security.version>
-    	<spring-social.version>1.1.0.RELEASE</spring-social.version>
+		<spring-social.version>1.1.2.RELEASE</spring-social.version>
 		<spring-social-facebook.version>2.0.1.RELEASE</spring-social-facebook.version>
-    	<org.aspectj-version>1.8.1</org.aspectj-version>
- 		<helianto.version>0.4.4-SNAPSHOT</helianto.version>
-		<org.slf4j.version>1.7.10</org.slf4j.version>
-		<logback.version>1.0.13</logback.version>
+ 		<helianto.version>0.4.4-RELEASE</helianto.version>
 	</properties>
 	
 	<dependencies>
-		<!-- Logging -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${org.slf4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>${org.slf4j.version}</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>jul-to-slf4j</artifactId>
-			<version>${org.slf4j.version}</version>
-		</dependency>
-  		<dependency>
-		    <groupId>ch.qos.logback</groupId>
-		    <artifactId>logback-classic</artifactId>
-		    <version>${logback.version}</version>
-		</dependency>
-		
 		<!-- 
 		 ! Helianto
 		 ! -->

@@ -53,19 +53,21 @@ public class SignupService {
 	 * @param signupRepository
 	 * @param userRepository
 	 * @param notificationSender
+	 * @param providerSignInUtils
 	 */
 	@Inject
 	public SignupService(LeadRepository leadRepository,
 			IdentityRepository identityRepository,
 			SignupRepository signupRepository, UserRepository userRepository,
-			NotificationSender notificationSender) {
+			NotificationSender notificationSender,
+			ProviderSignInUtils providerSignInUtils) {
 		super();
 		this.leadRepository = leadRepository;
 		this.identityRepository = identityRepository;
 		this.signupRepository = signupRepository;
 		this.userRepository = userRepository;
 		this.notificationSender = notificationSender;
-		this.providerSignInUtils = new ProviderSignInUtils();
+		this.providerSignInUtils = providerSignInUtils;
 	}
 	
 	/**

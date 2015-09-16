@@ -215,10 +215,5 @@ public class SecurityWebConfig
 		return Encryptors.queryableText(env.getProperty("security.encryptPassword", "password"), env.getProperty("security.encryptSalt", "00"));
 	}
     
-    @Bean
-    public ProviderSignInUtils providerSignInUtils(){
-    	return new ProviderSignInUtils();
-    }
-
 
 }
