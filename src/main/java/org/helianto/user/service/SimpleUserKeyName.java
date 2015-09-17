@@ -7,8 +7,9 @@ import org.helianto.core.internal.KeyNameAdapter;
 public enum SimpleUserKeyName implements KeyNameAdapter
 {
 	
-	CUSTOMER('C'),
-	ASSOCIATE('A');
+	USER('A')
+	, GUEST('X')
+	, ADMIN('G');
 	
 	private char value;
 	

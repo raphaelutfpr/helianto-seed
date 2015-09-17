@@ -63,7 +63,9 @@
 			<#--
 			 # Email inválido
 			 #-->
-			<#if emailError?? && emailError="invalid" ><div class="alert alert-danger" role="alert"><@spring.message "label.email.invalid" /> </div></#if>
+			<#if emailError?? && emailError="invalid" ><div class="alert alert-danger" role="alert">
+				<@spring.message "label.email.invalid" /> </div>
+			</#if>
 
 			<#if email??>
 				<type="email" class="form-control" placeholder="Email" required="true" id="email">
@@ -74,7 +76,8 @@
 							data-ng-model="principal" data-ng-keyUp="emailTester()"
 							data-ng-blur="emailTester();saveEmail(principal)"
 							value="${principal!''}"
-							placeholder="E-mail" class="form-control">		
+							placeholder="E-mail" class="form-control">
+									
 						  <span class="input-group-addon" data-ng-show="emailOk">
 						  <i class="fa fa-check" style="color:green;" ></i>
 						  </span>
@@ -123,7 +126,7 @@
 			</div>
 			
 			<div id="input-group-submit" class="form-group">
-				<button type="submit" class="form-control btn btn-primary full-width" data-ng-disabled="!emailOk || !checked"><@spring.message "Enviar e-mail de confirmação" /></button>
+				<button type="submit" class="form-control btn btn-primary full-width" data-ng-disabled="!emailOk || !checked"> Enviar e-mail de confirmação </button>
 			</div>
 		</form>
 		</div>
@@ -157,16 +160,24 @@
 
 	
 	<!-- AngularJs package -->
-	<script type="text/javascript" src="/webjars/angularjs/1.3.1/angular.min.js"></script>
-	<script type="text/javascript" src="/webjars/angularjs/1.3.1/angular-sanitize.min.js"></script>
-	<script type="text/javascript" src="/webjars/angularjs/1.3.1/angular-resource.js"></script>
-	<script type="text/javascript" src="/webjars/angularjs/1.3.1/angular-route.min.js"></script>
-	<script type="text/javascript" src="/webjars/angularjs/1.3.1/angular-cookies.min.js"></script>
-	<script type="text/javascript" src="/webjars/angularjs/1.3.1/i18n/angular-locale_${locale!'pt-br'}.js"></script>
-	<script type="text/javascript" src="/webjars/angular-ui-bootstrap/0.11.2/ui-bootstrap-tpls.js"></script>
-	<script type="text/javascript" src="/webjars/angular-ui-utils/0.1.1/ui-utils.min.js"></script>
-
-	<script type="text/javascript" src="/assets/security/ng-security-module.js"></script>
+	
+	<!-- AngularJs package -->
+	<script type="text/javascript" src="/webjars/angularjs/1.4.3/angular.min.js"></script>
+	<script type="text/javascript" src="/webjars/angularjs/1.4.3/angular-sanitize.min.js"></script>
+	<script type="text/javascript" src="/webjars/angularjs/1.4.3/angular-resource.js"></script>
+	<script type="text/javascript" src="/webjars/angularjs/1.4.3/angular-route.min.js"></script>
+	<script type="text/javascript" src="/webjars/angularjs/1.4.3/angular-cookies.min.js"></script>
+	<script type="text/javascript" src="/webjars/angularjs/1.4.3/angular-animate.min.js"></script>
+	<script type="text/javascript" src="/webjars/angularjs/1.4.3/i18n/angular-locale_${locale!'pt-br'}.js"></script>
+	<script type="text/javascript" src="/webjars/angular-loading-bar/0.7.1/loading-bar.min.js"></script>
+	<!-- <script type="text/javascript" src="/webjars/angular-ui-bootstrap/0.13.1/ui-bootstrap-tpls.js"></script>
+	 -->
+	<script src="/js/ui-bootstrap-tpls-0.13.2.min.js"></script>
+	<script type="text/javascript" src="/webjars/angular-ui-utils/0.2.2/ui-utils.min.js"></script>
+	<!-- Services to apps-->
+	<script type="text/javascript" src="/assets/iservport-layout-std.js"></script>
 	<script type="text/javascript" src="/assets/services.js"></script>
+	<script type="text/javascript" src="/assets/security/ng-security-module.js"></script>
+
 </body>
 </html>

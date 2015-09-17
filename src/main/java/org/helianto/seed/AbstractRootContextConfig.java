@@ -6,54 +6,39 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.helianto.core.config.HeliantoServiceConfig;
-import org.helianto.core.sender.NotificationSender;
-import org.helianto.network.service.RootQueryService;
-import org.helianto.network.service.SimpleNetworkKeyName;
 import org.helianto.sendgrid.config.SendGridConfig;
-import org.helianto.user.service.SimpleUserKeyName;
-import org.helianto.user.service.UserQueryService;
 import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jndi.JndiObjectFactoryBean;
-import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.i18n.CookieLocaleResolver;
-import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+
+
 
 /**
- * Basic Java configuration.
+ * Basic Java configuration. 
  * 
  * @author mauriciofernandesdecastro
  */
 @Configuration
 @EnableWebMvc
-@Import({HeliantoServiceConfig.class, SendGridConfig.class})
+@Import({HeliantoServiceConfig.class, SendGridConfig.class, OAuth2ClientConfig.class})
 @ComponentScan(
 	basePackages = {
 		"org.helianto.*.controller"
 })
 @EnableJpaRepositories(
     basePackages={"org.helianto.*.repository"})
-public abstract class AbstractRootContextConfig extends WebMvcConfigurerAdapter {
+public abstract class AbstractRootContextConfig extends AbstractContextConfig {
 	
-	/**
-	 * Override to set JNDI name.
-	 */
-	protected String getJndiName() {
-		return "jdbc/iservportDB";
-	}
+	@Inject
+	protected Environment env;
 	
 	/**
 	 * Override to set packages to scan.
@@ -62,119 +47,39 @@ public abstract class AbstractRootContextConfig extends WebMvcConfigurerAdapter 
 		return new String[] {"org.helianto.*.domain"};
 	}
 	
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
-	@Inject
-	private DataSource dataSource;
-	
-	@Inject
-	private JpaVendorAdapter vendorAdapter;
-	
 	/**
-	 * JNDI factory.
-	 * 
-	 * @throws IllegalArgumentException
-	 * @throws NamingException
-	 */
-	@Bean
-	public Object jndiObjectFactoryBean() throws IllegalArgumentException, NamingException {
-		JndiObjectFactoryBean jndiFactory = new JndiObjectFactoryBean();
-		jndiFactory.setJndiName("jdbc/iservportDB");
-		jndiFactory.setResourceRef(true);
-		jndiFactory.afterPropertiesSet();
-		return jndiFactory.getObject();
-	}
-	
-	/**
-	 * Substitui a configuração original do <code>EntityManagerFactory</code>
-	 * para incluir novos pacotes onde pesquisar por entidades persistentes.
+	 * Entity manager factory.
 	 */
 	@Bean 
 	public EntityManagerFactory entityManagerFactory() {
+		HibernateJpaVendorAdapter vendor = new HibernateJpaVendorAdapter();
+		vendor.setGenerateDdl(env.getProperty("helianto.sql.generateDdl", Boolean.class, Boolean.TRUE));
+
 		LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
-		bean.setDataSource(dataSource);
+		bean.setDataSource(dataSource());
 		bean.setPackagesToScan(getPacakgesToScan());
-		bean.setJpaVendorAdapter(vendorAdapter);
+		bean.setJpaVendorAdapter(vendor);
 		bean.setPersistenceProvider(new HibernatePersistence());
 		bean.afterPropertiesSet();
         return bean.getObject();
 	}
 	
 	/**
-	 * JNDI data source.
+	 * Simple data source.
 	 * 
 	 * @throws NamingException 
 	 * @throws IllegalArgumentException 
 	 */
 	@Bean
-	public DataSource dataSource() throws IllegalArgumentException, NamingException {
-		return (DataSource) jndiObjectFactoryBean();
+	public DataSource dataSource() throws IllegalArgumentException {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        
+        dataSource.setDriverClassName(env.getRequiredProperty("helianto.db.driver"));
+        dataSource.setUrl(env.getRequiredProperty("helianto.db.url"));
+        dataSource.setUsername(env.getRequiredProperty("helianto.db.username"));
+        dataSource.setPassword(env.getRequiredProperty("helianto.db.password"));
+         
+        return dataSource;
 	}
 	
-	/**
-	 * Static resources.
-	 */
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/webjars/**").addResourceLocations("/webjars/");
-        registry.addResourceHandler("/css/**").addResourceLocations("classpath:/META-INF/css/").setCachePeriod(31556926);
-        registry.addResourceHandler("/fonts/**").addResourceLocations("classpath:/META-INF/fonts/").setCachePeriod(31556926);
-        registry.addResourceHandler("/images/**").addResourceLocations("classpath:/META-INF/images/").setCachePeriod(31556926);
-        registry.addResourceHandler("/js/**").addResourceLocations("classpath:/META-INF/js/").setCachePeriod(31556926);
-        registry.addResourceHandler("/assets/**").addResourceLocations("classpath:/assets/").setCachePeriod(31556926);
-        registry.addResourceHandler("/views/**").addResourceLocations("classpath:/views/").setCachePeriod(31556926);
-	}	                    
-	
-	/**
-	 * Notification sender.
-	 */
-	@Bean
-	public NotificationSender notificationSender() {
-		return new NotificationSender();
-	}
-	
-	/**
-	 * Password encoder.
-	 */
-	@Bean
-	public Md5PasswordEncoder notificationEncoder() {
-		return new Md5PasswordEncoder();
-	}
-	
-	/**
-	 * Add Locale change interceptor.
-	 */
-	public void addInterceptors(InterceptorRegistry registry) {
-		LocaleChangeInterceptor localeInterceptor = new LocaleChangeInterceptor();
-		localeInterceptor.setParamName("siteLocale");
-		registry.addInterceptor(localeInterceptor);
-	}
-	
-	/**
-	 * Cookie locale resolver.
-	 */
-	@Bean
-	public LocaleResolver localeResolver() {
-		return new CookieLocaleResolver();
-	}
-	
-	/**
-	 * Subclasses may override to create custom qualifiers.
-	 */
-	@Bean
-	public RootQueryService rootQueryService() {
-		return new RootQueryService(SimpleNetworkKeyName.values());
-	}
-
-	/**
-	 * Subclasses may override to create custom qualifiers.
-	 */
-	@Bean
-	public UserQueryService userQueryService() {
-		return new UserQueryService(SimpleUserKeyName.values());
-	}
-
 }

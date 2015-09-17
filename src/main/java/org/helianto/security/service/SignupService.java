@@ -18,7 +18,9 @@ import org.helianto.user.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.UserProfile;
+import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequest;
@@ -53,19 +55,24 @@ public class SignupService {
 	 * @param signupRepository
 	 * @param userRepository
 	 * @param notificationSender
+	 * @param connectionFactoryLocator
+	 * @param connectionRepository
 	 */
 	@Inject
 	public SignupService(LeadRepository leadRepository,
 			IdentityRepository identityRepository,
-			SignupRepository signupRepository, UserRepository userRepository,
-			NotificationSender notificationSender) {
+			SignupRepository signupRepository, 
+			UserRepository userRepository,
+			NotificationSender notificationSender,
+			ConnectionFactoryLocator connectionFactoryLocator,
+			UsersConnectionRepository connectionRepository) {
 		super();
 		this.leadRepository = leadRepository;
 		this.identityRepository = identityRepository;
 		this.signupRepository = signupRepository;
 		this.userRepository = userRepository;
 		this.notificationSender = notificationSender;
-		this.providerSignInUtils = new ProviderSignInUtils();
+		this.providerSignInUtils = new ProviderSignInUtils(connectionFactoryLocator, connectionRepository);
 	}
 	
 	/**
@@ -84,7 +91,22 @@ public class SignupService {
 		}
 		return new Signup(contextId, "");
 	}
-
+ 
+	/**
+	 * Verify if email exists
+	 * 
+	 * @param signup
+	 * */
+	public boolean searchPrincipal(Signup signup){
+		List<User> userList = userRepository.findByIdentityPrincipal(signup.getPrincipal());
+		Identity identity = identityRepository.findByPrincipal(signup.getPrincipal());
+		
+		if(identity == null && userList.size()==0){ // se o email não exisite, pode inseri-lom entao retorna true
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * True if all existing users for the identity are valid, otherwise admin is notified.
 	 * 
@@ -181,9 +203,7 @@ public class SignupService {
 			identity = identityRepository.saveAndFlush(signup.createIdentityFromForm());
 			logger.info("New identity {} created", identity.getPrincipal());
 		}
-
 		// TODO save the ipAddress
-		
 		return signupRepository.saveAndFlush(signup);
 	}
 	

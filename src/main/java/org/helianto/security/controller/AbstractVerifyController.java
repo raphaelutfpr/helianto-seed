@@ -31,6 +31,7 @@ import org.helianto.install.service.EntityInstallStrategy;
 import org.helianto.install.service.UserInstallService;
 import org.helianto.security.domain.IdentitySecret;
 import org.helianto.security.internal.UserDetailsAdapter;
+import org.helianto.security.repository.SignupTmpRepository;
 import org.helianto.security.service.AuthorizationChecker;
 import org.helianto.security.util.SignInUtils;
 import org.helianto.user.domain.User;
@@ -46,11 +47,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
 /**
- * Verify controller.
+ * Base class to verify controllers.
+ * 
+ * Subclasses must implement the prototype generation strategy accordingly.
  * 
  * @author mauriciofernandesdecastro
  */
-@RequestMapping("/verify")
+
 public abstract class AbstractVerifyController
 	extends AbstractCryptoController
 {
@@ -84,6 +87,9 @@ public abstract class AbstractVerifyController
 	
 	@Inject
 	private ProviderSignInUtils providerSignInUtils;
+	
+	@Inject
+	private SignupTmpRepository signupTmpRepository;
 
 	/**
 	 * Create = true if identity not yet exists.
@@ -123,13 +129,13 @@ public abstract class AbstractVerifyController
 	 * @param expirationLimit
 	 */
 	protected int findPreviousSignupAttempt(String confirmationToken, int expirationLimit) {
-		Lead lead = leadRepository.findByToken(confirmationToken);
-		if (lead!=null) {
-			if (expirationLimit>0 && lead.getIssueDate()!=null) {
-				DateMidnight expirationDate = new DateMidnight(lead.getIssueDate()).plusDays(expirationLimit + 1);
+		Signup signup = signupTmpRepository.findByToken(confirmationToken);
+		if (signup!=null) {
+			if (expirationLimit>0 && signup.getIssueDate()!=null) {
+				DateMidnight expirationDate = new DateMidnight(signup.getIssueDate()).plusDays(expirationLimit + 1);
 				logger.debug("Previous signup attempt valid to {} ", expirationDate);
-				if (!expirationDate.isAfterNow()) {
-					return identityRepository.findByPrincipal(lead.getPrincipal()).getId();
+				if (expirationDate.isAfterNow()) {
+					return identityRepository.findByPrincipal(signup.getPrincipal()).getId();
 				}
 			}
 		}
@@ -138,6 +144,7 @@ public abstract class AbstractVerifyController
 	}
 	
 	/**
+	 * Authorize.
 	 * 
 	 * @param user
 	 * @param request
@@ -264,14 +271,6 @@ public abstract class AbstractVerifyController
 		}
 	}
 
-
-//	List<Entity> prototypes = entityInstallStrategy.generateEntityPrototypes(identity);
-//	Entity entity = null;
-//	for (Entity prototype: prototypes) {
-//		entity = entityInstallService.installEntity(prototype);
-//	}
-//	logger.debug("entity {} created", entity.getAlias());
-	
 	/**
 	 * Remove temporary lead.
 	 * 

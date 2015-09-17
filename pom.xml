@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.helianto</groupId>
 		<artifactId>helianto</artifactId>
-		<version>0.4.4-SNAPSHOT</version>
+		<version>0.5.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>helianto-seed</artifactId>
 	
@@ -32,38 +32,12 @@
 	<properties>
 	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.test.failure.ignore>false</maven.test.failure.ignore>
-		<spring-security.version>3.2.3.RELEASE</spring-security.version>
-    	<spring-social.version>1.1.0.RELEASE</spring-social.version>
+		<spring-social.version>1.1.2.RELEASE</spring-social.version>
 		<spring-social-facebook.version>2.0.1.RELEASE</spring-social-facebook.version>
-    	<org.aspectj-version>1.8.1</org.aspectj-version>
- 		<helianto.version>0.4.4-SNAPSHOT</helianto.version>
-		<org.slf4j.version>1.7.10</org.slf4j.version>
-		<logback.version>1.0.13</logback.version>
+ 		<helianto.version>0.5.0-SNAPSHOT</helianto.version>
 	</properties>
 	
 	<dependencies>
-		<!-- Logging -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${org.slf4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>${org.slf4j.version}</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>jul-to-slf4j</artifactId>
-			<version>${org.slf4j.version}</version>
-		</dependency>
-  		<dependency>
-		    <groupId>ch.qos.logback</groupId>
-		    <artifactId>logback-classic</artifactId>
-		    <version>${logback.version}</version>
-		</dependency>
-		
 		<!-- 
 		 ! Helianto
 		 ! -->
@@ -172,12 +146,12 @@
 		<dependency>
 		    <groupId>org.webjars</groupId>
 		    <artifactId>angular-ui-bootstrap</artifactId>
-		    <version>0.13.1</version>
+		    <version>0.13.3</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.webjars</groupId>
 		    <artifactId>angularjs</artifactId>
-		    <version>1.3.1</version>
+		    <version>1.4.3</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.webjars</groupId>
@@ -195,6 +169,11 @@
 		    <version>3.3.2-1</version>
 		</dependency>
 		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>momentjs</artifactId>
+		    <version>2.10.3</version>
+		</dependency>
+		<dependency>
 		    <groupId>org.webjars</groupId>
 		    <artifactId>nervgh-angular-file-upload</artifactId>
 		    <version>1.1.5-1</version>
@@ -203,6 +182,11 @@
 		    <groupId>org.webjars</groupId>
 		    <artifactId>angular-loading-bar</artifactId>
 		    <version>0.7.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>jQuery-slimScroll</artifactId>
+		    <version>1.3.3</version>
 		</dependency>
 		
 		<!-- Apache Commons -->
@@ -273,6 +257,21 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.social</groupId>
+			<artifactId>spring-social-security</artifactId>
+			<version>${spring-social.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-web</artifactId>
+				</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-aop</artifactId>
+					</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-web</artifactId>
 			<version>${spring-social.version}</version>
 			<exclusions>
@@ -297,6 +296,37 @@
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-facebook-web</artifactId>
 			<version>${spring-social-facebook.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-web</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<!-- Spring Security OAuth -->
+		<dependency>
+			<groupId>org.springframework.security.oauth</groupId>
+			<artifactId>spring-security-oauth2</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+				</exclusion>
+			</exclusions>
+			<version>2.0.7.RELEASE</version>
 		</dependency>
 
  		<!--  Servlet 3.0  -->
@@ -311,8 +341,44 @@
 	
 	<build>
 		<finalName>helianto-seed</finalName>
+		<pluginManagement>
+			<plugins>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<warSourceDirectory>webapp</warSourceDirectory>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.15</version>
+				<configuration>
+					<skip>false</skip>
+					<forkMode>once</forkMode>
+					<testFailureIgnore>false</testFailureIgnore>
+					<includes>
+						<include implementation="java.lang.String">**/*Tests.class
+						</include>
+					</includes>
+					<excludes>
+						<exclude implementation="java.lang.String">**/Abstract*</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
-	
+		
 	<repositories>
 	
 	    <repository>
