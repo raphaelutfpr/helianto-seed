@@ -2,13 +2,15 @@ package org.helianto.core.social;
 
 import javax.inject.Inject;
 
-import org.helianto.core.social.SignInUtils;
 import org.helianto.security.internal.UserDetailsAdapter;
 import org.helianto.user.domain.User;
 import org.helianto.user.repository.UserRepository;
-import org.springframework.stereotype.Service;
 
-@Service
+/**
+ * Required to sign in users after social providers.
+ *  
+ * @author mauriciofernandesdecastro
+ */
 public class UserSocialSignInService {
 	
 	@Inject

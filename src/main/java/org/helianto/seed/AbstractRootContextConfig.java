@@ -28,7 +28,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  */
 @Configuration
 @EnableWebMvc
-@Import({HeliantoServiceConfig.class, SendGridConfig.class})
+@Import({HeliantoServiceConfig.class, SendGridConfig.class, OAuth2ClientConfig.class})
 @ComponentScan(
 	basePackages = {
 		"org.helianto.*.controller"

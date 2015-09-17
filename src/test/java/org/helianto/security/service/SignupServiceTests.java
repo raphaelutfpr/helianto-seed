@@ -199,7 +199,7 @@ public class SignupServiceTests {
 				return true;
 			}
 		};
-		signupService = new SignupService(leadRepository, identityRepository, signupRepository, userRepository, notificationSender, null) {
+		signupService = new SignupService(leadRepository, identityRepository, signupRepository, userRepository, notificationSender, null, null) {
 			@Override
 			public boolean allUsersForIdentityAreValid(Signup signup) {
 				calledNotifyAdminIfUserIsNotValid = true;

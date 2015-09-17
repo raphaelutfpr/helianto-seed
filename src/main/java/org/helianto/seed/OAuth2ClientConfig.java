@@ -97,13 +97,17 @@ public class OAuth2ClientConfig implements SocialConfigurer {
 	
 	@Bean
 	public ConnectController connectController(ConnectionFactoryLocator connectionFactoryLocator, ConnectionRepository connectionRepository) {
-		ConnectController connectController = new ConnectController(connectionFactoryLocator, connectionRepository);
-		return connectController;
+		return new ConnectController(connectionFactoryLocator, connectionRepository);
 	}
 
 	@Bean
 	public ProviderSignInController providerSignInController(ConnectionFactoryLocator connectionFactoryLocator, UsersConnectionRepository usersConnectionRepository) {
 		return new ProviderSignInController(connectionFactoryLocator, usersConnectionRepository, new SimpleSignInAdapter(new HttpSessionRequestCache(), userSocialSignInService));
+	}
+	
+	@Bean
+	public UserSocialSignInService userSocialSignInService() {
+		return new UserSocialSignInService();
 	}
 	
 	@Bean

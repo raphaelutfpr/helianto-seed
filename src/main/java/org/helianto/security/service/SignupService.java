@@ -18,7 +18,9 @@ import org.helianto.user.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.UserProfile;
+import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequest;
@@ -53,21 +55,24 @@ public class SignupService {
 	 * @param signupRepository
 	 * @param userRepository
 	 * @param notificationSender
-	 * @param providerSignInUtils
+	 * @param connectionFactoryLocator
+	 * @param connectionRepository
 	 */
 	@Inject
 	public SignupService(LeadRepository leadRepository,
 			IdentityRepository identityRepository,
-			SignupRepository signupRepository, UserRepository userRepository,
+			SignupRepository signupRepository, 
+			UserRepository userRepository,
 			NotificationSender notificationSender,
-			ProviderSignInUtils providerSignInUtils) {
+			ConnectionFactoryLocator connectionFactoryLocator,
+			UsersConnectionRepository connectionRepository) {
 		super();
 		this.leadRepository = leadRepository;
 		this.identityRepository = identityRepository;
 		this.signupRepository = signupRepository;
 		this.userRepository = userRepository;
 		this.notificationSender = notificationSender;
-		this.providerSignInUtils = providerSignInUtils;
+		this.providerSignInUtils = new ProviderSignInUtils(connectionFactoryLocator, connectionRepository);
 	}
 	
 	/**
