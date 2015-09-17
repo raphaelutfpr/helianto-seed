@@ -255,7 +255,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
+<!-- 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-security</artifactId>
 			<version>${spring-social.version}</version>
@@ -270,7 +270,7 @@
 					</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
+ -->		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-web</artifactId>
 			<version>${spring-social.version}</version>
