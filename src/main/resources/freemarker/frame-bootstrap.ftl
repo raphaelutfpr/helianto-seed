@@ -66,9 +66,7 @@
 	</div><!-- modal-fade -->	
 	
 	[#include "/_js.html" /]
-	<!-- Redactor -->
-	<script src="/redactor/redactor.min.js"></script>
-	<script type="text/javascript" src="/assets/angular-redactor.js"> </script>
+	[#include "/_custom.html" /]
 	[#if customControllerBody??]
 	<script type="text/javascript" >
 		var app = angular.module(${baseName});
