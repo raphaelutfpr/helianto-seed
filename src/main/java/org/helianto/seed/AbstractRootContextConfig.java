@@ -54,6 +54,7 @@ public abstract class AbstractRootContextConfig extends AbstractContextConfig {
 	public EntityManagerFactory entityManagerFactory() {
 		HibernateJpaVendorAdapter vendor = new HibernateJpaVendorAdapter();
 		vendor.setGenerateDdl(env.getProperty("helianto.sql.generateDdl", Boolean.class, Boolean.TRUE));
+		vendor.setDatabasePlatform(env.getProperty("helianto.db.dialect", "org.hibernate.dialect.MySQL5Dialect"));
 
 		LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
 		bean.setDataSource(dataSource());

@@ -1,8 +1,8 @@
 (function() {
 	app = angular.module('root', ['ui.bootstrap', 'app.layout', 'angular-loading-bar', 'app.services']);
 
-	app.controller('RootController', ['$scope', '$window', '$http', '$resource', 'qualifierService', 'genericServices', 'securityServices'
-	                                 , function($scope, $window, $http, $resource, qualifierService, genericServices,  securityServices) {
+	app.controller('RootController', ['$scope', '$window', '$http', '$resource', 'qualifierService', 'lang'
+	                                 , function($scope, $window, $http, $resource, qualifierService, lang) {
 		
 		$scope.baseName = "root";
 		
@@ -20,18 +20,6 @@
 
 		$scope.root;
 
-		securityServices.getCategoryMap();
-		$scope.showMenuItem =  function(code){
-			return securityServices.showMenuItem(code);
-		}
-		securityServices.getAuthorizedRoles();
-		$scope.isAuthorized = function(role, ext){
-			return securityServices.isAuthorized(role, ext);
-		}
-		$scope.logout = function(){
-			return securityServices.logout();
-		}
-		
 		/**
 		 * Qualifier
 		 */

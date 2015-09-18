@@ -11,6 +11,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
     [#include "/frame-head.ftl" /]
+    [#include "/frame-head-custom.ftl" /]
 
     <script type="text/javascript">var externalId = ${externalId!0};</script>
 	<link type="image/x-icon" href="/images/favicon.ico" rel="shortcut icon">
