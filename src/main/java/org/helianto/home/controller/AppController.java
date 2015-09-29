@@ -59,6 +59,7 @@ public class AppController {
 		}
 		if (locale!=null) {
 			model.addAttribute("locale", locale.toString());
+			model.addAttribute("locale_", locale.toString().replace("_", "-"));
 		}
 		return getTemplateName();
 	}
