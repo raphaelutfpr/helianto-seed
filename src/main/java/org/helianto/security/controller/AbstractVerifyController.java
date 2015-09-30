@@ -39,6 +39,8 @@ import org.helianto.user.domain.User;
 import org.joda.time.DateMidnight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -87,10 +89,13 @@ public abstract class AbstractVerifyController
 	private AuthorizationChecker authorizationChecker;
 	
 	@Inject
-	private ProviderSignInUtils providerSignInUtils;
+	private SignupTmpRepository signupTmpRepository;
+
+	@Inject
+	private UsersConnectionRepository connectionRepository;
 	
 	@Inject
-	private SignupTmpRepository signupTmpRepository;
+	private ConnectionFactoryLocator connectionFactoryLocator;
 
 	/**
 	 * Create = true if identity not yet exists.
@@ -154,6 +159,7 @@ public abstract class AbstractVerifyController
 		if (user != null) {
 			UserDetailsAdapter userDetails = authorizationChecker.updateAuthorities(new UserDetailsAdapter(user));
 			SignInUtils.signin(userDetails);
+			ProviderSignInUtils providerSignInUtils = new ProviderSignInUtils(connectionFactoryLocator, connectionRepository);
 			providerSignInUtils.doPostSignUp(user.getId()+"", request);
 		}
 	}
