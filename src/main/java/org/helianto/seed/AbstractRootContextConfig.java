@@ -20,6 +20,8 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
 
 
 /**
@@ -66,24 +68,46 @@ public abstract class AbstractRootContextConfig extends AbstractContextConfig {
         return bean.getObject();
 	}
 	
+//	/**
+//	 * Simple data source.
+//	 * 
+//	 * @throws NamingException 
+//	 * @throws IllegalArgumentException 
+//	 */
+//	@Bean
+//	public DataSource dataSource() throws IllegalArgumentException {
+//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+//        
+//        dataSource.setDriverClassName(env.getRequiredProperty("helianto.db.driver"));
+//        dataSource.setUrl(env.getRequiredProperty("helianto.db.url"));
+//        dataSource.setUsername(env.getRequiredProperty("helianto.db.username"));
+//        dataSource.setPassword(env.getRequiredProperty("helianto.db.password"));
+//         
+//        return dataSource;
+//	}
+//	
 	/**
-	 * Simple data source.
-	 * 
-	 * @throws NamingException 
-	 * @throws IllegalArgumentException 
+	 * Data source.
 	 */
 	@Bean
-	public DataSource dataSource() throws IllegalArgumentException {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        
-        dataSource.setDriverClassName(env.getRequiredProperty("helianto.db.driver"));
-        dataSource.setUrl(env.getRequiredProperty("helianto.db.url"));
-        dataSource.setUsername(env.getRequiredProperty("helianto.db.username"));
-        dataSource.setPassword(env.getRequiredProperty("helianto.db.password"));
-         
-        return dataSource;
+	public DataSource dataSource() {
+		try {
+			ComboPooledDataSource ds = new ComboPooledDataSource();
+			ds.setDriverClass(env.getProperty("helianto.jdbc.driverClassName", "org.hsqldb.jdbcDriver"));
+			ds.setJdbcUrl(env.getProperty("helianto.jdbc.url", "jdbc:hsqldb:file:target/testdb/db2;shutdown=true"));
+			ds.setUser(env.getProperty("helianto.jdbc.username", "sa"));
+			ds.setPassword(env.getProperty("helianto.jdbc.password", ""));
+			ds.setAcquireIncrement(5);
+			ds.setIdleConnectionTestPeriod(60);
+			ds.setMaxPoolSize(100);
+			ds.setMaxStatements(50);
+			ds.setMinPoolSize(10);
+			return ds;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
-	
+
 	/**
 	 * Subclasses must define how business entities will be named and installed.
 	 */
