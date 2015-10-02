@@ -19,6 +19,7 @@ import javax.inject.Inject;
 
 import org.helianto.core.domain.Identity;
 import org.helianto.core.repository.IdentityRepository;
+import org.helianto.core.sender.PasswordRecoverySender;
 import org.helianto.security.domain.IdentitySecret;
 import org.helianto.security.internal.UserAuthentication;
 import org.helianto.security.repository.IdentitySecretRepository;
@@ -27,7 +28,6 @@ import org.helianto.user.repository.UserRepository;
 import org.springframework.core.env.Environment;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,12 +36,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
- * Controlador para o caso de uso de recuperação de senha.
+ * Spring MVC password recovery controller.
  * 
  * @author mauriciofernandesdecastro
  */
 @RequestMapping(value="/recovery")
-public class PasswordRecoveryController {
+public class PasswordRecoveryController extends AbstractCryptoController{
 	
 	@Inject 
 	private IdentityRepository identityRepository;
@@ -49,28 +49,28 @@ public class PasswordRecoveryController {
 	@Inject
 	private Environment env;
 	
-	@Inject
-	private AbstractCryptoController identityCrypto;
-	
 	@Inject 
 	private UserRepository userRepository;
 	
 	@Inject
 	private IdentitySecretRepository identitySecretRepository;
 	
+	@Inject
+	private PasswordRecoverySender passwordRecoverySender;
+	
 	
 	/**
-	 * Obtém e-mail para recuperação de senha.
+	 * Password recovery e-mail.
 	 */
 	@RequestMapping(value={"/", ""}, method={ RequestMethod.GET })
 	public String recovery(String error, Model model) {
-		
+		System.err.println("recovery");
 		return "login/passwordRecover";
 		
 	}
 		
 	/**
-	 * Formulário de troca de senha (usuários já autenticados).
+	 * Password change form (when user is already registered).
 	 * 
 	 * @param userAuthentication
 	 * @param model
@@ -98,7 +98,7 @@ public class PasswordRecoveryController {
 	}
 	
 	/**
-	 * Recebe formulário com a nova senha.
+	 * Password change submission.
 	 * 
 	 * @param model
 	 * @param email
@@ -117,7 +117,7 @@ public class PasswordRecoveryController {
 				model.addAttribute("recoverFailMsg", "label.user.password.recover.fail.message.0");
 				return "login/passwordChange";
 			}
-			identityCrypto.changeIdentitySecret(identity.getPrincipal(), password);
+			changeIdentitySecret(identity.getPrincipal(), password);
 			model.addAttribute("recoverFail", "false");
 			return "redirect:/app/home/";
 		}
@@ -128,7 +128,7 @@ public class PasswordRecoveryController {
 	}
 
 	/**
-	 * ENVIA o email com os dados para recuperação de senha.
+	 * Send password retrieval e-mail.
 	 * 
 	 * @param model
 	 * @param principal
@@ -143,14 +143,10 @@ public class PasswordRecoveryController {
 		}
 		
 		try {
-			Identity identity = identityRepository.findByPrincipal(principal);
+			Identity recipient = identityRepository.findByPrincipal(principal);
 			
-			if (identity!=null) {
-				Identity sender = identityRepository.findByPrincipal(env.getProperty("iservport.sender.mail"));
-				
-				// Envia...
-				/*
-				if (UserPasswordRecoverySender.send(identity, sender, env, identityCrypto.encryptToken(identity))) {
+			if (recipient!=null) {
+				if (passwordRecoverySender.send(recipient, env.getProperty("sender.recovery.subject", "Password recovery e-mail"))) {
 					model.addAttribute("emailRecoverySent", true);
 				}
 				else {
@@ -158,7 +154,6 @@ public class PasswordRecoveryController {
 					model.addAttribute("emailRecoveryFailed", true);
 					return "/login/passwordRecover";
 				} 
-				*/
 				return "redirect:/login/";
 			}
 			
@@ -186,7 +181,7 @@ public class PasswordRecoveryController {
 	@RequestMapping(value="/return/{token}", method=RequestMethod.GET)
 	public String mail(Model model, @PathVariable String token) {
 		System.err.println("Token:   " + token);
-		int identityId = identityCrypto.decriptAndValidateToken(token);
+		int identityId = decriptAndValidateToken(token);
 		Identity identity = identityRepository.findOne(identityId);
 		if (identity!=null) {
 			model.addAttribute("email", identity.getPrincipal());

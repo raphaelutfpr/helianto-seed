@@ -1,10 +1,14 @@
-
-var myMod = angular.module('app.services', ['ngResource'])
+angular.module('app.services', ['ngResource'])
 .config(function (datepickerConfig, datepickerPopupConfig) {
     datepickerConfig.showWeeks = false;
     // datepickerPopupConfig.toggleWeeksText = null;
     datepickerPopupConfig.showButtonBar = false;
 
+})
+.filter('trustAsHtml', function($sce) {
+  return function(html) {
+    return $sce.trustAsHtml(html);
+  };
 })
 .factory("securityServices", ['$http', function($http) {
 	var categoryMapList =  {};

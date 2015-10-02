@@ -12,7 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  * 
  * @author mauriciofernandesdecastro
  */
-@PropertySource("classpath:/freeemarker/sendgrid/sender.properties")
+@PropertySource("classpath:/freemarker/sendgrid/sender.properties")
 public abstract class AbstractBodyTemplateSender 
 	extends AbstractTemplateSender
 {
