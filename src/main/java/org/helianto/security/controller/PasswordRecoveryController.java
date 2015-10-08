@@ -42,7 +42,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author mauriciofernandesdecastro
  */
 @Controller
-@RequestMapping(value="/recovery")
+//@RequestMapping(value="/recovery")
 public class PasswordRecoveryController extends AbstractCryptoController{
 	
 	@Inject 
@@ -64,8 +64,9 @@ public class PasswordRecoveryController extends AbstractCryptoController{
 	/**
 	 * Password recovery e-mail.
 	 */
-	@RequestMapping(value={"/", ""}, method={ RequestMethod.GET })
+	@RequestMapping(value={"/recovery", ""}, method={ RequestMethod.GET })
 	public String recovery(String error, Model model) {
+		System.err.println("login/passwordRecover");
 		return "login/passwordRecover";
 		
 	}
@@ -79,6 +80,7 @@ public class PasswordRecoveryController extends AbstractCryptoController{
 	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value={"/self", "self"}, method= {RequestMethod.POST, RequestMethod.GET })
 	public String change(UserAuthentication userAuthentication, Model model) {
+		System.err.println("change");
 		try {
 			User user = userRepository.findOne(userAuthentication.getUserId());
 			Identity  identity = user.getIdentity();

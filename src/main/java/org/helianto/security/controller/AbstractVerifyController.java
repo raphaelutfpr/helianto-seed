@@ -80,8 +80,8 @@ public abstract class AbstractVerifyController
 	@Inject 
 	private UserInstallService userInstallService;
 	
-	@Inject
-	protected EntityInstallStrategy entityInstallStrategy;
+	//@Inject
+	//protected EntityInstallStrategy entityInstallStrategy;
 	
 	@Inject
 	private SignupRepository signupRepository;
@@ -256,7 +256,7 @@ public abstract class AbstractVerifyController
 	protected void createEntities(Operator context, List<Entity> prototypes, Identity identity) {
 		Entity entity = null;
 		for (Entity prototype: prototypes) {
-			entity = entityInstallStrategy.installEntity(context, prototype);
+			entity = installEntity(context, prototype);
 			if(entity!=null){
 				createUser(entity, identity);
 			}
