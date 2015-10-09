@@ -358,7 +358,7 @@ angular.module('app.services', ['ngResource'])
 		
 		return qualifierService;
 	})
-	.controller('ViewController', ['$scope', '$http', 'securityServices', function($scope, $http, securityServices) {
+	.controller('ViewController', ['$scope', '$http', 'securityServices', 'lang', function($scope, $http, securityServices, lang) {
 		
 		/**
 		 * Abas
