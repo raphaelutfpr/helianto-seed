@@ -67,7 +67,7 @@
 				<@spring.message "label.email.invalid" /> </div>
 			</#if>
 
-			<#if email??>
+			<#if email??>cf
 				<type="email" class="form-control" placeholder="Email" required="true" id="email">
 			<#else> 
 				<div id="form-group-email" class="form-group">

@@ -212,6 +212,7 @@ public abstract class AbstractVerifyController
 	public String postVerificationPage(Model model, @RequestParam(defaultValue="1") Integer contextId
 			, @RequestParam String email, @RequestParam String password) {
 		
+		System.err.println("/createPass");
 		Identity identity = identityRepository.findByPrincipal(email);
 		model.addAttribute("userExists", true);
 		logger.debug("User {} exists",identity.getPrincipal());
@@ -223,6 +224,9 @@ public abstract class AbstractVerifyController
 		Operator context = contextRepository.findOne(contextId);
 		Signup signup = getSignup(contextId, identity);
 		List<Entity> prototypes = generateEntityPrototypes(signup);
+		System.err.println("Context: " + context.getOperatorName());
+		System.err.println("Prototype: " + prototypes.size());
+		System.err.println("Identity: " + identity.getDisplayName());
 		createEntities(context, prototypes, identity);
 		model.addAttribute("passError", "false");
 		
