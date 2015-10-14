@@ -66,7 +66,6 @@ public class PasswordRecoveryController extends AbstractCryptoController{
 	 */
 	@RequestMapping(value={"/recovery", ""}, method={ RequestMethod.GET })
 	public String recovery(String error, Model model) {
-		System.err.println("login/passwordRecover");
 		return "login/passwordRecover";
 		
 	}
@@ -80,7 +79,6 @@ public class PasswordRecoveryController extends AbstractCryptoController{
 	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value={"/self", "self"}, method= {RequestMethod.POST, RequestMethod.GET })
 	public String change(UserAuthentication userAuthentication, Model model) {
-		System.err.println("change");
 		try {
 			User user = userRepository.findOne(userAuthentication.getUserId());
 			Identity  identity = user.getIdentity();
@@ -183,7 +181,6 @@ public class PasswordRecoveryController extends AbstractCryptoController{
 	 */
 	@RequestMapping(value="/return/{token}", method=RequestMethod.GET)
 	public String mail(Model model, @PathVariable String token) {
-		System.err.println("Token:   " + token);
 		int identityId = decriptAndValidateToken(token);
 		Identity identity = identityRepository.findOne(identityId);
 		if (identity!=null) {

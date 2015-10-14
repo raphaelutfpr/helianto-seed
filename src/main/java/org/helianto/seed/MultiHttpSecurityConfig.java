@@ -175,7 +175,6 @@ public class MultiHttpSecurityConfig
     					cookie.setPath("/");
     					response.addCookie(cookie);
     				}
-    				System.err.println("Request: " + request.getPathInfo() + " Response: " + response.getStatus());
     				filterChain.doFilter(request, response);
     			}
     		};
