@@ -41,8 +41,8 @@ public abstract class AbstractBodyTemplateSender
 
 	@Override
 	public String getBody(Map<String, String> paramMap) {
-		paramMap.put("recipientFirstName", recipientName);
-		paramMap.put("recipientEmail", recipientEmail);
+		//paramMap.put("recipientFirstName", recipientName);
+		//paramMap.put("recipientEmail", recipientEmail);
 		
 		System.err.println("recipientFirstName: "+ recipientName);
 		
