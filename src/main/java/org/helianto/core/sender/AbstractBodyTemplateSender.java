@@ -66,7 +66,6 @@ public abstract class AbstractBodyTemplateSender
 		body.append("\" style=\"color: #08088A; text-decoration: underline;\">")
 		.append(staticRedirectMessage)
 		.append("</a></p></div>");
-		System.err.println(getConfirmationUri("xxx"));	
 		System.err.println(body.toString());
 		
 		return body.toString();
