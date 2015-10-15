@@ -119,6 +119,7 @@ public abstract class AbstractVerifyController
 	@RequestMapping(value={"/", ""}, method= RequestMethod.GET, params={"confirmationToken"})
 	public String getVerificationPage(Model model, @RequestParam String confirmationToken) {
 		int identityId = findPreviousSignupAttempt(confirmationToken, 5);
+		
 		if (identityId!=0) {
 			Identity  identity = identityRepository.findOne(identityId);
 			return createPassword(model, identity);
@@ -126,7 +127,7 @@ public abstract class AbstractVerifyController
 		else {
 			model.addAttribute("userConfirmed", false);
 		}
-		return SignUpController.SIGN_UP;
+		return "redirect:"+SignUpController.SIGN_UP;
 	}
 	
 	/**
@@ -143,6 +144,7 @@ public abstract class AbstractVerifyController
 				logger.debug("Previous signup attempt valid to {} ", expirationDate);
 				if (expirationDate.isAfterNow()) {
 					return identityRepository.findByPrincipal(signup.getPrincipal()).getId();
+					
 				}
 			}
 		}

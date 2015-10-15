@@ -32,7 +32,7 @@ public class SignUpController
 	extends AbstractCryptoController
 {
 
-	public static final String SIGN_UP = "/signup/";
+	public static final String SIGN_UP = "/signup";
 	
 	public static final String SIGN_UP_TEMPLATE = "security/signup";
 	
@@ -80,15 +80,26 @@ public class SignUpController
 	}
 	
 	/**
-	 * Save the lead.
+	 * Check if email exists.
 	 * 
 	 * @param model
 	 * @param principal
 	 */
-	@RequestMapping(value={"/", ""}, method=RequestMethod.GET, params="tempEmail", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value={"/", ""}, method=RequestMethod.GET, params="principal", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public String saveLead(@RequestParam String principal) {
-		if(signupService.saveLead(principal)){
+	public String verify(@RequestParam String principal) {
+		return "{\"exists\":" + !signupService.searchPrincipal(new Signup(0, principal)) + "}";
+	}
+	
+	/**
+	 * Save Lead
+	 * @param principal
+	 * @return
+	 */
+	@RequestMapping(value={"/", ""}, method=RequestMethod.POST, params="tempEmail", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String saveLead(@RequestParam String tempEmail) {
+		if(signupService.saveLead(tempEmail)){
 			return "{\"exists\": true}";
 		}
 		return "{\"exists\": false}";

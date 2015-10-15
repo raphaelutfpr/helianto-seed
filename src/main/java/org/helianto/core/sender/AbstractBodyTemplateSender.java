@@ -44,7 +44,7 @@ public abstract class AbstractBodyTemplateSender
 		//paramMap.put("recipientFirstName", recipientName);
 		//paramMap.put("recipientEmail", recipientEmail);
 		
-		System.err.println("recipientFirstName: "+ recipientName);
+//		System.err.println("recipientFirstName: "+ recipientName);
 		
 		StringBuilder body = new StringBuilder();
 		body.append("<div class='background-color: black; height: 12px;'> ")
@@ -66,7 +66,7 @@ public abstract class AbstractBodyTemplateSender
 		body.append("\" style=\"color: #08088A; text-decoration: underline;\">")
 		.append(staticRedirectMessage)
 		.append("</a></p></div>");
-			
+		System.err.println(getConfirmationUri("xxx"));	
 		System.err.println(body.toString());
 		
 		return body.toString();
