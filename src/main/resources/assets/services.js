@@ -5,11 +5,29 @@ angular.module('app.services', ['ngResource'])
     datepickerPopupConfig.showButtonBar = false;
 
 })
+//filters
+//================================================= 
+.filter('pad', function() {
+	return function(num) {
+		return (num < 10 ? '0' + num : num); // coloca o zero na frente
+	};
+})
 .filter('trustAsHtml', function($sce) {
   return function(html) {
     return $sce.trustAsHtml(html);
   };
 })
+/**
+ * Language filter.
+ */
+.filter('i18n', ['lang', function (lang) {
+	return function (key, p) {
+		if (typeof lang[key] != 'undefined' && lang[key] != '') {
+			return (typeof p === "undefined") ? lang[key] : lang[key].replace('@{}@', p);
+		}
+		return key;
+	}
+}])
 .factory("securityServices", ['$http', function($http) {
 	var categoryMapList =  {};
 	var getCategoryMap = function() {
@@ -94,13 +112,14 @@ angular.module('app.services', ['ngResource'])
 		}
 	}
 })
-//filters
-//================================================= 
-.filter('pad', function() {
-	return function(num) {
-		return (num < 10 ? '0' + num : num); // coloca o zero na frente
-	};
-})
+.directive("slimScroll",[function(){
+	return{
+		restrict:"A"
+		,link:function(scope,ele,attrs) {
+			return ele.slimScroll({height:attrs.scrollHeight||"100%"})
+		}
+	}
+}])
 /**
  * Directiva lista qualificadores 
  */
@@ -358,7 +377,7 @@ angular.module('app.services', ['ngResource'])
 		
 		return qualifierService;
 	})
-	.controller('ViewController', ['$scope', '$http', 'securityServices', function($scope, $http, securityServices) {
+	.controller('ViewController', ['$scope', '$http', 'securityServices', function($scope, $http, securityServices, lang) {
 		
 		/**
 		 * Abas
