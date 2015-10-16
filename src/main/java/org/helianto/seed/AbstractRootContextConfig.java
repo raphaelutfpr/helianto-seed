@@ -59,7 +59,7 @@ public abstract class AbstractRootContextConfig extends AbstractContextConfig {
 	public EntityManagerFactory entityManagerFactory() {
 		HibernateJpaVendorAdapter vendor = new HibernateJpaVendorAdapter();
 		vendor.setGenerateDdl(env.getProperty("helianto.sql.generateDdl", Boolean.class, Boolean.TRUE));
-		vendor.setDatabasePlatform(env.getProperty("helianto.db.dialect", "org.hibernate.dialect.MySQL5Dialect"));
+		vendor.setDatabasePlatform(env.getProperty("helianto.jdbc.dialect", "org.hibernate.dialect.HSQLDialect"));
 		DataSource dataSource = dataSource();
 		logger.info("Creating entity manager from {}", dataSource);
 		LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
@@ -71,24 +71,6 @@ public abstract class AbstractRootContextConfig extends AbstractContextConfig {
         return bean.getObject();
 	}
 	
-//	/**
-//	 * Simple data source.
-//	 * 
-//	 * @throws NamingException 
-//	 * @throws IllegalArgumentException 
-//	 */
-//	@Bean
-//	public DataSource dataSource() throws IllegalArgumentException {
-//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//        
-//        dataSource.setDriverClassName(env.getRequiredProperty("helianto.db.driver"));
-//        dataSource.setUrl(env.getRequiredProperty("helianto.db.url"));
-//        dataSource.setUsername(env.getRequiredProperty("helianto.db.username"));
-//        dataSource.setPassword(env.getRequiredProperty("helianto.db.password"));
-//         
-//        return dataSource;
-//	}
-//	
 	/**
 	 * Data source.
 	 */
