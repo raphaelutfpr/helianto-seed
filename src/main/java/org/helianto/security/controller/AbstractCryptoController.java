@@ -11,7 +11,10 @@ import org.helianto.security.service.IdentityCryptoService;
  * 
  * @author mauriciofernandesdecastro
  */
-public class AbstractCryptoController {
+public class AbstractCryptoController 
+//extends AbstractEntityInstallStrategy
+
+{
 
 	@Inject
 	private IdentityCryptoService identityCrypto;
@@ -62,6 +65,36 @@ public class AbstractCryptoController {
 	public IdentitySecret changeIdentitySecret(String principal, String password){
 		return identityCrypto.changeIdentitySecret(principal, password);
 	}
-	
+
+//	@Override
+//	public List<Entity> generateEntityPrototypes(Object... arg0) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	protected String getDefaultCountry() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	protected String getDefaultStateFile() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	protected String getInitialSecret() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	protected void runOnce(Operator arg0, Entity arg1, User arg2) {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//	
 
 }
