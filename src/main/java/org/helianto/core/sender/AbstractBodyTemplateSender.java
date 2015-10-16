@@ -16,7 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public abstract class AbstractBodyTemplateSender 
 	extends AbstractTemplateSender
 {
-
+ 
 	
 	@Value("${sender.staticRedirectQuestion}")
 	private String staticRedirectQuestion;

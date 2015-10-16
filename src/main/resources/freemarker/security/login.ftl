@@ -71,7 +71,7 @@
 				<p><input type="checkbox" name="remember-me" > Lembrar senha</p>
 			</div>
 			<div class="col-md-6">
-				<a class="pull-right" href="/recovery/">Esqueceu sua senha?</a>
+				<a target="_self" class="pull-right" data-ng-href="/recovery/">Esqueceu sua senha?</a>
 			</div>
 		</div>
 		
