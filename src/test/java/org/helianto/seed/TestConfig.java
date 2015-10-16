@@ -7,7 +7,7 @@ import org.helianto.core.domain.Entity;
 import org.helianto.core.domain.Signup;
 import org.helianto.core.sender.UserConfirmationSender;
 import org.helianto.install.service.EntityInstallStrategy;
-import org.helianto.security.controller.AbstractVerifyController;
+import org.helianto.security.controller.VerifyController;
 import org.helianto.sendgrid.config.SendGridConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +38,7 @@ public class TestConfig extends AbstractRootContextConfig {
 	 * 
 	 * @author mauriciofernandesdecastro
 	 */
-	public class VerifyControllerStub extends AbstractVerifyController {
+	public class VerifyControllerStub extends VerifyController {
 
 		@Override
 		protected List<Entity> generateEntityPrototypes(Signup signup) {
