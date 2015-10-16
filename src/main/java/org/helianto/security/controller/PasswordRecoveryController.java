@@ -28,6 +28,7 @@ import org.helianto.user.repository.UserRepository;
 import org.springframework.core.env.Environment;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,8 @@ import org.springframework.web.bind.annotation.RequestParam;
  * 
  * @author mauriciofernandesdecastro
  */
-@RequestMapping(value="/recovery")
+@Controller
+//@RequestMapping(value="/recovery")
 public class PasswordRecoveryController extends AbstractCryptoController{
 	
 	@Inject 
@@ -62,10 +64,9 @@ public class PasswordRecoveryController extends AbstractCryptoController{
 	/**
 	 * Password recovery e-mail.
 	 */
-	@RequestMapping(value={"/", ""}, method={ RequestMethod.GET })
+	@RequestMapping(value={"/recovery", ""}, method={ RequestMethod.GET })
 	public String recovery(String error, Model model) {
-		
-		return "login/passwordRecover";
+		return "security/passwordRecover";
 		
 	}
 		
@@ -83,7 +84,7 @@ public class PasswordRecoveryController extends AbstractCryptoController{
 			Identity  identity = user.getIdentity();
 			if (identity!=null) {
 				model.addAttribute("email", identity.getPrincipal());
-				return "login/passwordChange";
+				return "security/passwordChange";
 				
 			}
 			model.addAttribute("recoverFailMsg", "label.user.password.recover.fail.message.1");
@@ -124,7 +125,7 @@ public class PasswordRecoveryController extends AbstractCryptoController{
 		model.addAttribute("recoverFailMsg", "label.user.password.recover.fail.message.1");
 		model.addAttribute("recoverFail", "true");
 		
-		return "login/passwordChange";
+		return "security/passwordChange";
 	}
 
 	/**
@@ -139,7 +140,7 @@ public class PasswordRecoveryController extends AbstractCryptoController{
 		if (principal==null) {
 			model.addAttribute("recoverFailMsg", "label.user.password.recover.fail.message.1");
 			model.addAttribute("recoverFail", "true");
-			return "login/passwordRecover";
+			return "security/passwordRecover";
 		}
 		
 		try {
@@ -152,7 +153,7 @@ public class PasswordRecoveryController extends AbstractCryptoController{
 				else {
 					// Caso falhe o envio, retorna ao formulário de e-mail
 					model.addAttribute("emailRecoveryFailed", true);
-					return "/login/passwordRecover";
+					return "/security/passwordRecover";
 				} 
 				return "redirect:/login/";
 			}
@@ -180,18 +181,17 @@ public class PasswordRecoveryController extends AbstractCryptoController{
 	 */
 	@RequestMapping(value="/return/{token}", method=RequestMethod.GET)
 	public String mail(Model model, @PathVariable String token) {
-		System.err.println("Token:   " + token);
 		int identityId = decriptAndValidateToken(token);
 		Identity identity = identityRepository.findOne(identityId);
 		if (identity!=null) {
 			model.addAttribute("email", identity.getPrincipal());
-			return "login/passwordChange";
+			return "security/passwordChange";
 			
 		}
 		model.addAttribute("recoverFailMsg", "label.user.password.recover.fail.message.1");
 		model.addAttribute("recoverFail", "true");
 		
-		return "login/passwordChange";
+		return "security/passwordChange";
 	}
 	
 }

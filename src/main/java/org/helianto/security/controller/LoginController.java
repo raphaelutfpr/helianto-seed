@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import org.helianto.core.domain.Entity;
 import org.helianto.core.repository.EntityRepository;
 import org.helianto.security.internal.UserAuthentication;
+import org.springframework.core.env.Environment;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,9 @@ public class LoginController {
 	public static final String LOGIN_TEMPLATE = "security/login";
 	
 	@Inject 
+	private Environment env;
+	
+	@Inject 
 	private EntityRepository entityRepository;
 	
 	/**
@@ -34,10 +38,12 @@ public class LoginController {
 	@RequestMapping(value={"/", ""}, method=RequestMethod.GET)
 	public String signin( String error, Model model, @RequestParam(required = false) String logout ) {
 		model.addAttribute("baseName", "security");
+		model.addAttribute("main", "security/login");
+		model.addAttribute("copyright", env.getProperty("helianto.copyright", ""));
 		if (error!=null && error.equals("1")) {
 			model.addAttribute("error", "1");
 		}
-		return LOGIN_TEMPLATE;
+		return "frame-security";
 	}
 
 	

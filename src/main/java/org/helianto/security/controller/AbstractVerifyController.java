@@ -42,6 +42,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInUtils;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -63,9 +64,9 @@ public abstract class AbstractVerifyController
 	
 	private static final Logger logger = LoggerFactory.getLogger(AbstractVerifyController.class);
 	
-	public static final String PWD_CREATE = "/verify/createPassword";
+	public static final String PWD_CREATE = "/security/passwordCreate";
 	
-	public static final String PWD_VERIFY = "/verify/password";
+	public static final String PWD_VERIFY = "/security/password";
 	
 	@Inject 
 	private OperatorRepository contextRepository;
@@ -79,8 +80,8 @@ public abstract class AbstractVerifyController
 	@Inject 
 	private UserInstallService userInstallService;
 	
-	@Inject
-	protected EntityInstallStrategy entityInstallStrategy;
+	//@Inject
+	//protected EntityInstallStrategy entityInstallStrategy;
 	
 	@Inject
 	private SignupRepository signupRepository;
@@ -253,7 +254,7 @@ public abstract class AbstractVerifyController
 	protected void createEntities(Operator context, List<Entity> prototypes, Identity identity) {
 		Entity entity = null;
 		for (Entity prototype: prototypes) {
-			entity = entityInstallStrategy.installEntity(context, prototype);
+			entity = installEntity(context, prototype);
 			if(entity!=null){
 				createUser(entity, identity);
 			}

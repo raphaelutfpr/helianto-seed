@@ -31,19 +31,19 @@
 
 	[#if userExists??]
 		<div class="alert alert-danger" role="alert">
-		<@spring.message "label.user.exists" /> 
+		<p>Senha modificada com sucesso.</p> 
 		</div>
 	[/#if]
 	
 	[#if recoverFail?? && recoverFail="true" ]
 		<div class="alert alert-danger" role="alert">
-		<@spring.message "label.user.password.recover.fail" /> 
+		<p> Falha ao mudar a senha </p> 
 		</div>
 	[/#if]
 	
 	[#if recoverFail?? && recoverFail="false"]
 		<div class="alert alert-success" role="alert">
-		<@spring.message "label.user.password.recover.ok" /> 
+		<p> Senha modificada com sucesso. </p> 
 		</div>
 	[/#if]
 	
@@ -58,7 +58,7 @@
     	<h3 class="panel-title"><span class="glyphicon glyphicon-ok-sign"></span> Confirmação</h3>
     </div>
 	<div class="panel-body">
-			<form method="POST" name="form"  id="signup" action="/signup">
+			<form method="POST" name="form"  id="signup" action="/app/verify/createPass">
 				
 				<div id="form-group-email" class="form-group">
 					<input type="email" required="" name="username" data-ng-model="username" placeholder="[#if email??]${email}[/#if]" class="form-control ng-dirty ng-valid ng-valid-required ng-touched" disabled>
@@ -69,9 +69,11 @@
 				<password-checker password="password" cpassword="cpassword"> </password-checker>
 				<div id="form-group-password" class="field">
 				<input type="password"  required="" name="password"  id="password" placeholder="Senha" class="form-control" data-ng-model="password">
+				</br>
 				</div>
 				<div id="form-group-passwordc" class="field">
 					<input type="password"  required="" name="cpassword" id="cpassword" placeholder="Confirmação de senha" data-ng-model="cpassword" class="form-control">
+					</br>
 				</div>
 					
 				<button type="submit" class="btn btn-primary" style="width: 100%;" data-ng-disabled="cannotChangePassword"> Criar Senha </button>
@@ -82,7 +84,7 @@
 		
 	 <footer class="footer">
 		<hr>
-        <p></p>
+        <p>© 2001-2015 Winbid Negócios Governamentais </p>
   
   <!--
   
@@ -101,6 +103,6 @@
 	</div><!-- #main -->
 	</div><!-- #unauth -->
 
-	[#include "../frame-foot.ftl" /]
+[#include "../frame-foot.ftl" /]
 </body>
 </html>
