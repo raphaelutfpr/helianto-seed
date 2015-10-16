@@ -58,7 +58,7 @@
     	<h3 class="panel-title"><span class="glyphicon glyphicon-ok-sign"></span> Confirmação</h3>
     </div>
 	<div class="panel-body">
-			<form method="POST" name="form"  id="signup" action="/app/verify/createPass">
+			<form method="POST" name="form"  id="signup" action="/verify/createPass">
 				
 				<div id="form-group-email" class="form-group">
 					<input type="email" required="" name="username" data-ng-model="username" placeholder="[#if email??]${email}[/#if]" class="form-control ng-dirty ng-valid ng-valid-required ng-touched" disabled>
