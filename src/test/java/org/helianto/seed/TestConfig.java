@@ -48,12 +48,6 @@ public class TestConfig extends AbstractRootContextConfig {
 		
 	}
 
-	@Override
-	public EntityInstallStrategy entityInstallStrategy() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
     @Bean
 	public TextEncryptor textEncryptor() {
 		return Encryptors.queryableText(env.getProperty("security.encryptPassword", "password"), env.getProperty("security.encryptSalt", "00"));

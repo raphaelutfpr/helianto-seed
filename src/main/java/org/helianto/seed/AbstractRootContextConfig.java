@@ -1,7 +1,6 @@
 package org.helianto.seed;
 
 import javax.inject.Inject;
-import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -9,13 +8,14 @@ import org.helianto.core.config.HeliantoServiceConfig;
 import org.helianto.install.service.EntityInstallStrategy;
 import org.helianto.sendgrid.config.SendGridConfig;
 import org.hibernate.ejb.HibernatePersistence;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -40,6 +40,8 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
     basePackages={"org.helianto.*.repository"})
 public abstract class AbstractRootContextConfig extends AbstractContextConfig {
 	
+	private static final Logger logger = LoggerFactory.getLogger(AbstractRootContextConfig.class);
+	
 	@Inject
 	protected Environment env;
 	
@@ -58,9 +60,10 @@ public abstract class AbstractRootContextConfig extends AbstractContextConfig {
 		HibernateJpaVendorAdapter vendor = new HibernateJpaVendorAdapter();
 		vendor.setGenerateDdl(env.getProperty("helianto.sql.generateDdl", Boolean.class, Boolean.TRUE));
 		vendor.setDatabasePlatform(env.getProperty("helianto.db.dialect", "org.hibernate.dialect.MySQL5Dialect"));
-
+		DataSource dataSource = dataSource();
+		logger.info("Creating entity manager from {}", dataSource);
 		LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
-		bean.setDataSource(dataSource());
+		bean.setDataSource(dataSource);
 		bean.setPackagesToScan(getPacakgesToScan());
 		bean.setJpaVendorAdapter(vendor);
 		bean.setPersistenceProvider(new HibernatePersistence());
@@ -108,9 +111,4 @@ public abstract class AbstractRootContextConfig extends AbstractContextConfig {
 		}
 	}
 
-	/**
-	 * Subclasses must define how business entities will be named and installed.
-	 */
-	public abstract EntityInstallStrategy entityInstallStrategy();
-	
 }

@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 
  * @author mauriciofernandesdecastro
  */
-@RequestMapping(value={"/api/root"})
+@RequestMapping(value={"/app/root"})
 @Controller
 @PreAuthorize("isAuthenticated()")
 public class RootSearchController {
