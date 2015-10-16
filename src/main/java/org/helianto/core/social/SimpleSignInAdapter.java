@@ -23,7 +23,7 @@ public class SimpleSignInAdapter implements SignInAdapter {
 
 	private static final Logger logger = LoggerFactory.getLogger(SimpleSignInAdapter.class);
 	
-	private final RequestCache requestCache;
+	private final RequestCache requestCache; 
 	
 	private final UserSocialSignInService userSocialSignInService;
 	
