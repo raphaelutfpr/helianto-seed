@@ -11,7 +11,7 @@
 	<div id="main" class="container" data-ng-controller="SecurityController as securityCtrl" >
 	<div class="container-small" data-ng-cloak >
 
-	[#include "/${main!'login'}.html" /]
+	[#include "/${main!'login'}.ftl" /]
 	
 	<footer class="footer">
 		<hr>

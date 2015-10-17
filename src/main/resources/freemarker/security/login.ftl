@@ -1,3 +1,4 @@
+[#ftl]
 <script >
 	var email = [#if email??]'${email}' [#else]''[/#if];
 </script>
