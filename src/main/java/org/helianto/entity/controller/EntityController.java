@@ -114,6 +114,7 @@ public class EntityController {
 		List<UserAuthorityReadAdapter> authList = new ArrayList<>();
 		authList.addAll(userAuthorityRepository.findByUserGroupIdOrderByServiceCodeAsc(parentGroups));
 		authList.add(new UserAuthorityReadAdapter(0, 0, "USER", "READ"));
+
 		return authList;
 	}
 
