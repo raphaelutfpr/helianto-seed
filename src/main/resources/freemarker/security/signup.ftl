@@ -9,7 +9,7 @@
 	<link type="image/x-icon" href="/images/favicon.ico" rel="shortcut icon">
 	<link type="image/x-icon" href="/images/favicon.ico" rel="icon">
 
-    <title>SignUp Iservport</title>
+    <title>SignUp</title>
     
 	<!-- jQuery package -->
     <script type="text/javascript" src="/webjars/jquery/2.1.1/jquery.min.js"></script>
