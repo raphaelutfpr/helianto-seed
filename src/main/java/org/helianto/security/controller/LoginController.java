@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value={"/login"})
 public class LoginController {
 	
-	public static final String LOGIN_TEMPLATE = "security/login";
-	
 	@Inject 
 	private Environment env;
 	
@@ -38,13 +36,14 @@ public class LoginController {
 	 */
 	@RequestMapping(method=RequestMethod.GET)
 	public String signin( String error, Model model, @RequestParam(required = false) String logout ) {
+		model.addAttribute("titlePage", "Login");
 		model.addAttribute("baseName", "security");
 		model.addAttribute("main", "security/login");
 		model.addAttribute("copyright", env.getProperty("helianto.copyright", ""));
 		if (error!=null && error.equals("1")) {
 			model.addAttribute("error", "1");
 		}
-		return "frame-security";
+		return PasswordRecoveryController.FRAME_SECURITY;
 	}
 
 	/**
@@ -61,7 +60,7 @@ public class LoginController {
 		User user = new User();
 		user.setAccountNonExpired(false);
 		model.addAttribute("user", user);
-		return "frame-security";
+		return PasswordRecoveryController.FRAME_SECURITY;
 	}
 	
 	/**
