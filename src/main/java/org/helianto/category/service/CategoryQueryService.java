@@ -34,7 +34,6 @@ public class CategoryQueryService {
 	public List<QualifierAdapter> qualifier(int entityId) {
 		List<QualifierAdapter> qualifierList 
 			= QualifierAdapter.qualifierAdapterList(CategoryGroup.values());
-	
 		// counting
 		qualifierCount(entityId, qualifierList);
 		

@@ -16,7 +16,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 public abstract class AbstractBodyTemplateSender 
 	extends AbstractTemplateSender
 {
- 
 	
 	@Value("${sender.staticRedirectQuestion}")
 	private String staticRedirectQuestion;
@@ -44,7 +43,7 @@ public abstract class AbstractBodyTemplateSender
 		//paramMap.put("recipientFirstName", recipientName);
 		//paramMap.put("recipientEmail", recipientEmail);
 		
-//		System.err.println("recipientFirstName: "+ recipientName);
+		//System.err.println("recipientFirstName: "+ recipientName);
 		
 		StringBuilder body = new StringBuilder();
 		body.append("<div class='background-color: black; height: 12px;'> ")

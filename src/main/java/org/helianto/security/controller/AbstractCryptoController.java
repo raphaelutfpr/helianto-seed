@@ -1,5 +1,6 @@
 package org.helianto.security.controller;
 
+
 import javax.inject.Inject;
 
 import org.helianto.core.domain.Identity;
@@ -62,5 +63,4 @@ public class AbstractCryptoController {
 	public IdentitySecret changeIdentitySecret(String principal, String password){
 		return identityCrypto.changeIdentitySecret(principal, password);
 	}
-
 }
