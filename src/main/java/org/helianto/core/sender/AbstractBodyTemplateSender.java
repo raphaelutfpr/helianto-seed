@@ -34,7 +34,7 @@ public abstract class AbstractBodyTemplateSender
 	
 	@Override
 	protected String getConfirmationUri(String confirmationToken) {
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getApiUrl()+"/verify").queryParam("confirmationToken", confirmationToken);
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getApiUrl()+"/app/verify").queryParam("confirmationToken", confirmationToken);
 		return builder.build().encode().toUri().toString();
 	}
 
