@@ -39,6 +39,7 @@ import org.helianto.user.domain.User;
 import org.joda.time.DateMidnight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInUtils;
@@ -65,9 +66,12 @@ public class VerifyController
 	
 	private static final Logger logger = LoggerFactory.getLogger(VerifyController.class);
 	
-	public static final String PWD_CREATE = "/security/passwordCreate";
+	//public static final String PWD_CREATE = "/security/passwordCreate";
 	
 	public static final String PWD_VERIFY = "/security/password";
+	
+	@Inject
+	private Environment env;
 	
 	@Inject 
 	private OperatorRepository contextRepository;
@@ -186,6 +190,11 @@ public class VerifyController
 	 * @param identity
 	 */
 	protected String createPassword(Model model, Identity  identity) {
+		model.addAttribute("titlePage", "Password creation");
+		model.addAttribute("baseName", "security");
+		model.addAttribute("main", "security/passwordChange");
+		model.addAttribute("copyright", env.getProperty("helianto.copyright", ""));
+		
 		if(identity!=null){
 			model.addAttribute("email", removeLead(identity.getPrincipal()));
 			// prevents duplicated submission
@@ -197,7 +206,7 @@ public class VerifyController
 		else{
 			return "redirect:"+SignUpController.SIGN_UP;
 		}
-		return PWD_CREATE;
+		return PasswordRecoveryController.FRAME_SECURITY;
 	}
 	
 	/**
