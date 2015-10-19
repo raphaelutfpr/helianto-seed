@@ -6,8 +6,9 @@
 <!-- Filter -->
 <div class="col-md-3 col-sm-12">
 <div class="panel panel-default" data-ng-init="setSectionTab(-1)">
- 	<div class="list-group">
-		<a class="list-group-item" data-ng-repeat="qualifierItem in qualifiers" data-ng-show="qualifierValue!=qualifierItem.qualifierValue" data-ng-click="setExternalId(0);setQualifier(qualifierItem)" >
+ 	<div class="list-group" >
+		<a class="list-group-item" 
+		    data-ng-repeat="qualifierItem in qualifiers" data-ng-show="qualifierValue!=qualifierItem.qualifierValue" data-ng-click="setExternalId(0);setQualifier(qualifierItem)" >
 			<span class="h4">{{'CATEGORY_'+qualifierItem.qualifierName| i18n}}</span>
 			<span class="badge alert-danger" data-ng-show="qualifierItem.countAlerts>0">{{qualifierItem.countAlerts}}</span>
 			<span class="badge alert-warning" data-ng-show="qualifierItem.countWarnings>0 && qualifierItem.countAlerts==0">{{qualifierItem.countWarnings}}</span>

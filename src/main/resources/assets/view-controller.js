@@ -49,7 +49,7 @@ angular.module('app.services')
 			roleList = data.content;
 		});
 	}
-    $rootScope.roleList = [];
+    $rootScope.roleList = $rootScope.getAuthorizedRoles();
 	$rootScope.isAuthorized = function(role, ext){
 		return false;
 	}

@@ -101,7 +101,7 @@
 				}
 				else if(data.totalElements>1){
 					$scope.categorySearchList = data;	
-					openForm('form-search');
+					$scope.openForm('form-search');
 				}else{
 					$("#searchMsg").fadeIn(1000);
 					$("#searchMsg").fadeOut(5000);
@@ -169,7 +169,7 @@
 		//create
 		$scope.newCategory = function(categoryGroupValue) {
 			$scope.category = $scope.categoryResource.create({categoryGroup:categoryGroupValue});
-			openForm('form-category');
+			$scope.openForm('form-category');
 		};
 		//Update
 		$scope.updateCategory = function() {
@@ -206,10 +206,6 @@
 		 * Modal.
 		 * 
 		 */
-		$scope.openForm = function(formName){
-			openForm(formName);
-		}
-
 		$scope.openForm = function(formName){
 			$scope.message =[];
 			$scope.formUrl = '/assets/category/form/'+formName+'.html';
