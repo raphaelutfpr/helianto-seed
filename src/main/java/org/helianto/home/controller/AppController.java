@@ -61,7 +61,6 @@ public class AppController {
 			model.addAttribute("locale", locale.toString().toLowerCase());
 			model.addAttribute("locale_", locale.toString().replace("_", "-").toLowerCase());
 		}
-		System.err.println("//////"+locale.toString());
 		return getTemplateName();
 	}
 	
