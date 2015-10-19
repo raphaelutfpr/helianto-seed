@@ -1,0 +1,104 @@
+<form id="searchForm" data-ng-submit="searchCategory(searchForm, page)" class="form-horizontal" >     
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	<div class="row">
+	<div class="col-md-8">
+	<div class="input-group input-group-sm">
+		<input type="text" class="form-control"  placeholder="Pesquisar" size="32"  id="searchString2" name="searchString" data-ng-model="searchForm.searchString">
+		<span class="input-group-btn">
+			<button value="inst" type="submit" class="btn btn-default inst"><i class="glyphicon glyphicon-search" data-tooltip-placement="left" data-tooltip="Pesquisar itens"></i></button>
+		</span>
+	</div>
+	</div>
+	<div class="col-md-8">
+	<div class="alert alert-success col-sm-12" id="searchMsg2" style="display: none;"  role="alert"> {{'NO_RESULT' | i18n}}</div>
+	</div>
+	</div>
+</div><!-- modal-header-->
+  		
+<div class="modal-body">
+<div class="row">
+
+	<div class="col-md-8">
+	<a href="" class="list-group-item"
+		data-dismiss="modal"
+		data-ng-click="setExternalId(categoryItem.id);getCategory(categoryItem.id,null,true)" 
+		data-ng-repeat="categoryItem in categorySearchList.content"
+		class="btn col-xs-4">
+		<div class="row">
+		<div class="col-md-2">
+			<h2><i class="fa fa-cube"></i></h2>
+		</div>
+		<div class="col-md-10">
+			<div class="h4">{{categoryItem.categoryName}}</div>
+			<div class="h4"><small>{{categoryItem.categoryCode}}</small></div>
+		</div>
+	</div>		
+	</a>
+		<ul class="pager col-md-12" data-ng-show="categorySearchList.totalPages >0 && categorySearchList.totalElements > 0 && categorySearchList.numberOfElements >0">
+	       <li class="previous" 
+	       	data-ng-click="searchCategory(searchForm,nextAndPrevious.previous)" 
+	       	data-ng-class="{disabled:!nextAndPrevious.hasPrevious}" >
+	       		<a href="#">
+	       			<span class="glyphicon glyphicon-chevron-left"></span> 
+	       		</a>
+	       </li>
+	       <li class="text-center h4" >
+		{{categorySearchList.number * categorySearchList.size}} 
+		- {{(categorySearchList.number * categorySearchList.size) + categorySearchList.numberOfElements}} 
+		/ {{categorySearchList.totalElements}}
+		</li>
+	       <li class="next" 
+	       	data-ng-click="searchCategory(searchForm, nextAndPrevious.next)" 
+	       	data-ng-class="{disabled:!nextAndPrevious.hasNext}">
+	       		<a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a>
+	       </li>
+		</ul>
+		<div class="alert alert-warning alert-dismissible" role="alert" data-ng-hide="categorySearchList.totalPages >0 || categorySearchList.totalElements > 0 || categorySearchList.numberOfElements >0">
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		  <strong>{{'NO_CONTENT' | i18n}}</strong> 
+		</div>
+
+	</div><!-- col-md-8 -->
+	
+	<div class="col-md-4">
+		<a href="" data-ng-if="searchFilterVar==1"
+			data-tooltip-placement="left"
+			data-tooltip="{{'ALL_FOLDER' | i18n }}"
+			data-ng-click="searchFilter(0)">
+			Todas as Categorias
+			<i class="fa fa-toggle-on fa-3"></i>
+		</a> 
+		<a href="" data-ng-if="searchFilterVar!=1"
+			data-tooltip-placement="left"
+			data-tooltip="{{'FILL_FOLDER' | i18n }}"
+			data-ng-click="searchFilter(1)">
+			Pesquisando na Categoria {{qualifierName}}
+			<i class="fa fa-toggle-on fa-3"></i>
+		</a>   
+	<div class="h4">Ordenar por</div>
+	
+	<div class="radio">
+	  <label>
+	    <input type="radio" name="orderString" 
+	    data-ng-model="searchForm.orderString" 
+	    value="categoryCode"
+	    data-ng-change="searchCategory(searchForm, page)">
+	    por código
+	  </label>
+	</div>
+	<div class="radio">
+	  <label>
+	    <input type="radio" name="orderString" 
+	    data-ng-model="searchForm.orderString" 
+	    value="categoryName"
+	    data-ng-change="searchCategory(searchForm, page)">
+	    por Nome
+	  </label>
+	</div>
+	
+	</div><!-- col-md-4 -->
+	
+</div><!-- row -->
+</div>
+</form>	

@@ -1,0 +1,74 @@
+<div class="col-md-12"><h3>{{'CATEGORIES' | i18n}}</h3></div><!-- title -->
+
+<div class="col-md-12">
+<div class="row">
+
+<!-- Filter -->
+<div class="col-md-3 col-sm-12">
+<div class="panel panel-default" data-ng-init="setSectionTab(-1)">
+ 	<div class="list-group">
+		<a class="list-group-item" data-ng-repeat="qualifierItem in qualifiers" data-ng-show="qualifierValue!=qualifierItem.qualifierValue" data-ng-click="setExternalId(0);setQualifier(qualifierItem)" >
+			<span class="h4">{{'CATEGORY_'+qualifierItem.qualifierName| i18n}}</span>
+			<span class="badge alert-danger" data-ng-show="qualifierItem.countAlerts>0">{{qualifierItem.countAlerts}}</span>
+			<span class="badge alert-warning" data-ng-show="qualifierItem.countWarnings>0 && qualifierItem.countAlerts==0">{{qualifierItem.countWarnings}}</span>
+			<br/><span style="font-size: 70%; color: #aaa;">{{qualifierItem.countItems}} {{ 'ITEMS' | i18n}}</span>
+		</a>
+	</div>
+</div></div><!-- Filter -->
+
+<!-- Main -->
+<div class="col-sm-12 col-md-9">
+
+    <div class="panel panel-default">
+	<!--
+	 ! Title
+	 !-->
+	<div class="panel-body">
+	<div class="row">
+		<div class="col-md-12 col-xs-12">
+			<div class="h4 pull-right">
+				<a  data-ng-show="isSectionTabSet(-1)" data-ng-click="newCategory(qualifierValue)" class="btn btn-danger">
+					{{ 'NEW_CATEGORY' | i18n}}</a>
+			</div>
+			<div class="h3">{{'CATEGORY_'+qualifierName | i18n }}</div>
+		</div>
+	</div>
+	</div>
+	<!-- 
+	 ! Pills
+	 !-->
+	<div class="panel-body">
+		<ul class="nav nav-tabs">
+		  <li data-ng-class="{active:isSectionTabSet(-1)}">
+		    <a class="list-group-item" data-ng-click="setSectionTab(-1)">Categorias</a>
+		  </li>
+		</ul>
+	</div>
+	<!-- 
+	 ! Main content
+	 !-->
+	<div class="panel-body">
+        <div class="row">
+        <!-- 
+         ! SECTION -1
+         ! Category tab
+         !
+         ! -->
+        <div class="col-md-12" data-ng-show="isSectionTabSet(-1)">
+             <div data-ng-include="'/assets/category/selection/category.html'"></div>
+        </div>
+        <!-- 
+         ! SECTION 0
+         ! TODO
+         !
+         ! -->
+        <div class="col-md-12" data-ng-show="isSectionTabSet(0)">
+             <div class="row" data-ng-include="'/assets/category/selection/category.html'"></div>
+        </div>
+		</div>
+
+	</div>
+	</div>
+</div><!-- Main -->
+</div>
+</div>
