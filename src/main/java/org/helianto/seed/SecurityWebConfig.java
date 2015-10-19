@@ -49,7 +49,6 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
-import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 
@@ -214,4 +213,5 @@ public class SecurityWebConfig
 	public TextEncryptor textEncryptor() {
 		return Encryptors.queryableText(env.getProperty("security.encryptPassword", "password"), env.getProperty("security.encryptSalt", "00"));
 	}
+    
 }
