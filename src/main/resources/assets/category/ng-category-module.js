@@ -1,5 +1,5 @@
 (function() {
-	app = angular.module('category', ['ui.bootstrap', 'app.services', 'ngResource', 'ngSanitize', 'angular-loading-bar', 'angular-redactor']);
+	app = angular.module('category', ['ui.bootstrap', 'app.services', 'ngResource', 'ngSanitize', 'angular-loading-bar']);
 	
 	/**
 	 * Category controller
@@ -11,9 +11,7 @@
 
 		$scope.externalId = (externalId==null || externalId=='undefined')?0:externalId;
 
-		$scope.menu = menu;
 		$scope.baseName = "category";
-		$scope.menuName = "categories";
 
 		$scope.categoryNotExists = true;
 
