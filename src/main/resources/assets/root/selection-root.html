@@ -15,7 +15,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<form id="rootForm" data-ng-submit="search(0, '/search/0/')" class="form-inline pull-right">
-				<button class="btn btn-primary" data-ng-click="openForm('form-root-entity')">Nova entidade</button>
+				<button class="btn btn-primary" data-ng-show="isAdmin" data-ng-click="openForm('form-root-entity')">Nova entidade</button>
 				<div class="input-group input-group-sm">
 				<input type="hidden" name="qualifierValue" value="C" data-ng-model="searchModel.qualifierValue" class="ng-pristine ng-untouched ng-valid">
 				<input type="hidden" name="_csrf" value="4078c879-e55c-433b-8fba-6318c09bc596">
