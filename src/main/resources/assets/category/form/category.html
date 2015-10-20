@@ -1,0 +1,73 @@
+<!-- 
+ ! Form modal
+ ! -->
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	<h4 class="modal-title" id="modalLabel">{{'CATEGORY' | i18n}}</h4>
+</div><!-- modal-header-->
+  		
+<div class="modal-body">
+	
+	<form data-ng-submit="updateCategory()" 
+		class="form-horizontal" role="form">
+	
+		<div class="row">
+	
+			<div class="col-md-8" >
+				<div id="form-group-categoryCode" class="form-group">
+					<label for="categoryCode" class="col-sm-3 control-label">{{'CATEGORY_CODE' | i18n}}*</label>
+					<div class="col-sm-9">
+					<input id="categoryCode" type="text"  required="" name="categoryCode" maxlength="24" 
+					       placeholder="max 24 char" 
+					       data-ng-model="category.categoryCode" 
+					       class="form-control" />
+					</div>
+				</div>
+					
+				<div id="form-group-categoryName" class="form-group">
+					<label for="categoryName" class="col-sm-3 control-label">{{'CATEGORY_NAME' | i18n}}*</label>
+					<div class="col-sm-9">
+					<input id="categoryName" type="text"  required="" name="categoryName" maxlength="64" 
+					       placeholder="max 64 char" 
+					       data-ng-model="category.categoryName" 
+					       class="form-control" />
+					</div>
+				</div>
+				
+			</div><!-- col-md-8 -->
+			
+			<div class="col-md-4">
+			
+				<div class="h4" data-ng-show="qualifierItem.qualifierValue==qualifierValue" data-ng-repeat="qualifierItem in qualifiers" >
+					{{'CATEGORY_'+qualifierItem.qualifierName | i18n}}
+				</div>
+			
+				<div data-ng-show="message.exist" class="alert alert-danger" role="alert"> 
+					{{message.errorMessage | i18n}}
+					<a href="" data-ng-click="getCategory(message.id,null, null, true)" class="btn btn-sm btn-primary">
+						Abrir Categoria
+					</a>
+				</div>
+				
+			</div><!--col-md-4  -->	 
+	
+		</div>
+		<!-- row -->
+	
+		<hr />
+	
+		<!-- ! Submit row !-->
+		<div class="row">
+			<div class="col-md-12">
+				<!-- ! Submit button !-->
+				<div class="pull-right"> 
+					<button type="submit" name="submit" value="0" class="btn btn-primary">{{'SAVE' | i18n}}</button>
+					<a data-dismiss="modal"  class="btn btn-default">{{'CLOSE' | i18n}}</a>
+				</div>
+			</div>
+		</div>
+		<!-- row -->
+	</form>
+
+</div><!-- modal-body-->
+

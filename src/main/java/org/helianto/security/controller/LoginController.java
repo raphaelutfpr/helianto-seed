@@ -5,6 +5,8 @@ import javax.inject.Inject;
 import org.helianto.core.domain.Entity;
 import org.helianto.core.repository.EntityRepository;
 import org.helianto.security.internal.UserAuthentication;
+import org.helianto.user.domain.User;
+import org.springframework.core.env.Environment;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -23,7 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value={"/login"})
 public class LoginController {
 	
-	public static final String LOGIN_TEMPLATE = "security/login";
+	@Inject 
+	private Environment env;
 	
 	@Inject 
 	private EntityRepository entityRepository;
@@ -31,15 +34,34 @@ public class LoginController {
 	/**
 	 * Login page.
 	 */
-	@RequestMapping(value={"/", ""}, method=RequestMethod.GET)
+	@RequestMapping(method=RequestMethod.GET)
 	public String signin( String error, Model model, @RequestParam(required = false) String logout ) {
+		model.addAttribute("titlePage", "Login");
 		model.addAttribute("baseName", "security");
+		model.addAttribute("main", "security/login");
+		model.addAttribute("copyright", env.getProperty("helianto.copyright", ""));
 		if (error!=null && error.equals("1")) {
 			model.addAttribute("error", "1");
 		}
-		return LOGIN_TEMPLATE;
+		return PasswordRecoveryController.FRAME_SECURITY;
 	}
 
+	/**
+	 * Login errors.
+	 * 
+	 * @param model
+	 * @param username
+	 */
+	@RequestMapping(value="/error", method=RequestMethod.GET)
+	public String loginError( Model model, @RequestParam String type) {
+		model.addAttribute("baseName", "security");
+		model.addAttribute("main", "security/login");
+		model.addAttribute("error", true);
+		User user = new User();
+		user.setAccountNonExpired(false);
+		model.addAttribute("user", user);
+		return PasswordRecoveryController.FRAME_SECURITY;
+	}
 	
 	/**
 

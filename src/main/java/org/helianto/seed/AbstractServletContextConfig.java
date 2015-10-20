@@ -24,6 +24,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
@@ -49,6 +50,17 @@ public abstract class AbstractServletContextConfig extends WebMvcConfigurerAdapt
 		return new CurrentUserHandlerMethodArgumentResolver();
 	}
 
+	/**
+	 * Required to allow matrix type params.
+	 * @return
+	 */
+	@Bean
+	public RequestMappingHandlerMapping requestMappingHandlerMapping() {
+	    final RequestMappingHandlerMapping requestMappingHandlerMapping = new RequestMappingHandlerMapping();
+	    requestMappingHandlerMapping.setRemoveSemicolonContent(false); 
+	    return requestMappingHandlerMapping;
+	}
+	
 	/**
 	 * Argument resolvers.
 	 */

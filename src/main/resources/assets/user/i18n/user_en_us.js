@@ -1,0 +1,1 @@
+angular.module('app.services').	value('lang', {_getLocalizationKeys: function() {var keys = {};for (var k in this) {keys[k] = k;}return keys;}});

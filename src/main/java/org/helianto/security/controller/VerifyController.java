@@ -39,7 +39,7 @@ import org.helianto.user.domain.User;
 import org.joda.time.DateMidnight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInUtils;
@@ -58,15 +58,20 @@ import org.springframework.web.context.request.WebRequest;
  * 
  * @author mauriciofernandesdecastro
  */
-
-public abstract class AbstractVerifyController
+@Controller
+@RequestMapping("/verify")
+public class VerifyController
 	extends AbstractCryptoController
 {
-	private static final Logger logger = LoggerFactory.getLogger(AbstractVerifyController.class);
 	
-	public static final String PWD_CREATE = "/verify/createPassword";
+	private static final Logger logger = LoggerFactory.getLogger(VerifyController.class);
 	
-	public static final String PWD_VERIFY = "/verify/password";
+	//public static final String PWD_CREATE = "/security/passwordCreate";
+	
+	public static final String PWD_VERIFY = "/security/password";
+	
+	@Inject
+	private Environment env;
 	
 	@Inject 
 	private OperatorRepository contextRepository;
@@ -80,8 +85,8 @@ public abstract class AbstractVerifyController
 	@Inject 
 	private UserInstallService userInstallService;
 	
-	//@Inject
-	//protected EntityInstallStrategy entityInstallStrategy;
+	@Inject
+	private EntityInstallStrategy entityInstallStrategy;
 	
 	@Inject
 	private SignupRepository signupRepository;
@@ -119,7 +124,6 @@ public abstract class AbstractVerifyController
 	@RequestMapping(value={"/", ""}, method= RequestMethod.GET, params={"confirmationToken"})
 	public String getVerificationPage(Model model, @RequestParam String confirmationToken) {
 		int identityId = findPreviousSignupAttempt(confirmationToken, 5);
-		
 		if (identityId!=0) {
 			Identity  identity = identityRepository.findOne(identityId);
 			return createPassword(model, identity);
@@ -127,7 +131,7 @@ public abstract class AbstractVerifyController
 		else {
 			model.addAttribute("userConfirmed", false);
 		}
-		return "redirect:"+SignUpController.SIGN_UP;
+		return SignUpController.SIGN_UP;
 	}
 	
 	/**
@@ -144,7 +148,6 @@ public abstract class AbstractVerifyController
 				logger.debug("Previous signup attempt valid to {} ", expirationDate);
 				if (expirationDate.isAfterNow()) {
 					return identityRepository.findByPrincipal(signup.getPrincipal()).getId();
-					
 				}
 			}
 		}
@@ -187,6 +190,11 @@ public abstract class AbstractVerifyController
 	 * @param identity
 	 */
 	protected String createPassword(Model model, Identity  identity) {
+		model.addAttribute("titlePage", "Password creation");
+		model.addAttribute("baseName", "security");
+		model.addAttribute("main", "security/passwordChange");
+		model.addAttribute("copyright", env.getProperty("helianto.copyright", ""));
+		
 		if(identity!=null){
 			model.addAttribute("email", removeLead(identity.getPrincipal()));
 			// prevents duplicated submission
@@ -198,7 +206,7 @@ public abstract class AbstractVerifyController
 		else{
 			return "redirect:"+SignUpController.SIGN_UP;
 		}
-		return PWD_CREATE;
+		return PasswordRecoveryController.FRAME_SECURITY;
 	}
 	
 	/**
@@ -245,7 +253,9 @@ public abstract class AbstractVerifyController
 	 * 
 	 * @param identity
 	 */
-	protected abstract List<Entity> generateEntityPrototypes(Signup signup);
+	protected List<Entity> generateEntityPrototypes(Signup signup){
+		return entityInstallStrategy.generateEntityPrototypes(signup);
+	}
 
 	/**
 	 * Create entities.
@@ -253,22 +263,16 @@ public abstract class AbstractVerifyController
 	 * @param prototypes
 	 * @param identity
 	 */
-	@Autowired
 	protected void createEntities(Operator context, List<Entity> prototypes, Identity identity) {
 		Entity entity = null;
 		for (Entity prototype: prototypes) {
-			entity = installEntity(context, prototype);
+			entity = entityInstallStrategy.installEntity(context, prototype);
 			if(entity!=null){
 				createUser(entity, identity);
 			}
 		}
 	}
 	
-	private Entity installEntity(Operator context, Entity prototype) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	/**
 	 * Create new user.
 	 * 

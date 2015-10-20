@@ -1,55 +1,33 @@
 angular.module('app.services', ['ngResource'])
-.config(function (datepickerConfig, datepickerPopupConfig) {
-    datepickerConfig.showWeeks = false;
-    // datepickerPopupConfig.toggleWeeksText = null;
-    datepickerPopupConfig.showButtonBar = false;
-
-})
-.filter('trustAsHtml', function($sce) {
-  return function(html) {
-    return $sce.trustAsHtml(html);
-  };
-})
-.factory("securityServices", ['$http', function($http) {
-	var categoryMapList =  {};
-	var getCategoryMap = function() {
-		return $http.get('/api/category/qualifier')
-		.success(function(data, status, headers, config) {
-			categoryMapList = data;
-		});
-	}
-	var roleList = [];
-	var getAuthorizedRoles = function(userId) {
-		return $http.get('/api/entity/auth'+((userId!=null && userId!='null')?'?userId='+userId:''))
-		.success(function(data, status, headers, config) {
-			roleList = data.content;
-		});
-	}
-	return {
-		getAuthorizedRoles : (getAuthorizedRoles) ,
-		isAuthorized: function(role, extension) {
-			var result = false;
-			roleList.forEach(function(entry) {
-				if(entry.serviceName == (role) && entry.serviceExtension.indexOf(extension)>-1){
-					result = true;
-				}
-			});
-			return result;
-		
+	.config(function (datepickerConfig, datepickerPopupConfig) {
+	    datepickerConfig.showWeeks = false;
+	    // datepickerPopupConfig.toggleWeeksText = null;
+	    datepickerPopupConfig.showButtonBar = false;
+	
+	})
+	//filters
+	//================================================= 
+	/**
+	 * Language filter.
+	 */
+	.filter('i18n', ['lang', function (lang) {
+		return function (key, p) {
+			if (typeof lang[key] != 'undefined' && lang[key] != '') {
+				return (typeof p === "undefined") ? lang[key] : lang[key].replace('@{}@', p);
+			}
+			return key;
 		}
-		, getCategoryMap:(getCategoryMap)
-		, showMenuItem : function(menuCode){
-			var result = false;
-			categoryMapList.forEach(function(entry) {
-				if(entry.qualifierValue == menuCode && entry.countItems>0){
-					result = true;
-				}	
-			});
-			return result;
-		}
-		, logout: function() {return $http.post('/logout')}
-		}
-}])
+	}])
+	.filter('pad', function() {
+		return function(num) {
+			return (num < 10 ? '0' + num : num); // coloca o zero na frente
+		};
+	})
+	.filter('trustAsHtml', function($sce) {
+	  return function(html) {
+	    return $sce.trustAsHtml(html);
+	  };
+	})
 .factory("genericServices", function() {                                                                                                                                                   
 	return {                                                                                                                                                                                                              
 		getNextAndPreviousLinkByList: function(list) {   
@@ -94,13 +72,14 @@ angular.module('app.services', ['ngResource'])
 		}
 	}
 })
-//filters
-//================================================= 
-.filter('pad', function() {
-	return function(num) {
-		return (num < 10 ? '0' + num : num); // coloca o zero na frente
-	};
-})
+.directive("slimScroll",[function(){
+	return{
+		restrict:"A"
+		,link:function(scope,ele,attrs) {
+			return ele.slimScroll({height:attrs.scrollHeight||"100%"})
+		}
+	}
+}])
 /**
  * Directiva lista qualificadores 
  */
@@ -358,33 +337,60 @@ angular.module('app.services', ['ngResource'])
 		
 		return qualifierService;
 	})
-	.controller('ViewController', ['$scope', '$http', 'securityServices', 'lang', function($scope, $http, securityServices, lang) {
-		
-		/**
-		 * Abas
-		 */
-		$scope.sectionTab = 1;
-		$scope.setSectionTab = function(value) {
-			this.sectionTab = value;
-	    };
-	    $scope.isSectionTabSet = function(value) {
-	      return this.sectionTab === value;
-	    };
+
+	/**
+	 * View controller
+	 */
+	.controller('ViewController', ['$rootScope', '$http', '$resource', 'lang'
+	                               , function($rootScope, $http, $resource, lang) {
+			
+		$rootScope.logout = function() {
+			return $http.post('/logout');
+	    }
 
 		/**
-		 * Autorização
+		 * Tabs
 		 */
-		$scope.authList =[];
-		defineAuthorities();
-		function defineAuthorities(){
-			securityServices.getAuthorizedRoles(null).success(function(data, status, headers, config) {
-				$scope.authList = data.content;
+		$rootScope.sectionTab = 1;
+		$rootScope.setSectionTab = function(value) {
+			$rootScope.sectionTab = value;
+	    };
+	    $rootScope.isSectionTabSet = function(value) {
+	        return $rootScope.sectionTab === value;
+	    };
+	
+	    $rootScope.userAuthResource = $resource("/api/entity/auth", {userId: "@userId"}, {});
+	    $rootScope.roleList = [];
+		/**
+		 * Authorization
+		 */
+	    $rootScope.getAuthorizedRoles = function(userIdVal) {
+	    	$rootScope.userAuthResource.get({userId:userIdVal}).$promise.then(function(data) {
+				console.log(data)
+				$rootScope.roleList = data;
+				$rootScope.isAdmin=$rootScope.isAuthorized('ADMIN', 'MANAGER');
+				console.log($rootScope.isAuthorized('ADMIN', 'MANAGER'));
 			});
 		}
-		$scope.isAuthorized =function(role, ext){
-			return securityServices.isAuthorized($scope.authList, role, ext);
-		}
-		 
-	}]);
+	    
+	    $rootScope.getAuthorizedRoles();
+	    
+	    console.log($rootScope.roleList);
+	    
+	    
+	    
+		$rootScope.isAuthorized = function(role, ext){
+			var result = false;
+			$rootScope.roleList.forEach(function(entry) {
+				if(entry.serviceName == (role) && entry.serviceExtension.indexOf(extension)>-1){
+					result = true;
+				}
+			});
+			return result;
+		};
+		
+			 
+	}])
+	;
 	
 
