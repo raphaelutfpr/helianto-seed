@@ -6,6 +6,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.helianto.core.config.HeliantoServiceConfig;
+import org.helianto.install.service.EntityInstallStrategy;
 import org.helianto.sendgrid.config.SendGridConfig;
 import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.context.annotation.Bean;
@@ -54,6 +55,7 @@ public abstract class AbstractRootContextConfig extends AbstractContextConfig {
 	public EntityManagerFactory entityManagerFactory() {
 		HibernateJpaVendorAdapter vendor = new HibernateJpaVendorAdapter();
 		vendor.setGenerateDdl(env.getProperty("helianto.sql.generateDdl", Boolean.class, Boolean.TRUE));
+		vendor.setDatabasePlatform(env.getProperty("helianto.db.dialect", "org.hibernate.dialect.MySQL5Dialect"));
 
 		LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
 		bean.setDataSource(dataSource());
@@ -81,5 +83,10 @@ public abstract class AbstractRootContextConfig extends AbstractContextConfig {
          
         return dataSource;
 	}
+	
+	/**
+	 * Subclasses must define how business entities will be named and installed.
+	 */
+	public abstract EntityInstallStrategy entityInstallStrategy();
 	
 }

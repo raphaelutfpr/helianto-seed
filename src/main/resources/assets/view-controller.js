@@ -23,6 +23,7 @@ angular.module('app.services')
 /**
  * View controller
  */
+
 .controller('ViewController', ['$rootScope', '$http', 'lang'
                                , function($rootScope, $http, lang) {
 		

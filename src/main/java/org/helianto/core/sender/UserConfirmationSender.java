@@ -24,5 +24,4 @@ public class UserConfirmationSender
 	public UserConfirmationSender(Environment env) {
 		super(env.getProperty("sender.noReplyEmail"), env.getProperty("sender.rootFullName"), "userConfirmation");
 	}
-	
 }

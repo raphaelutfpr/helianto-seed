@@ -28,6 +28,7 @@ import org.helianto.user.repository.UserRepository;
 import org.springframework.core.env.Environment;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,8 @@ import org.springframework.web.bind.annotation.RequestParam;
  * 
  * @author mauriciofernandesdecastro
  */
-@RequestMapping(value="/recovery")
+@Controller
+//@RequestMapping(value="/recovery")
 public class PasswordRecoveryController extends AbstractCryptoController{
 	
 	@Inject 
@@ -62,9 +64,8 @@ public class PasswordRecoveryController extends AbstractCryptoController{
 	/**
 	 * Password recovery e-mail.
 	 */
-	@RequestMapping(value={"/", ""}, method={ RequestMethod.GET })
+	@RequestMapping(value={"/recovery", ""}, method={ RequestMethod.GET })
 	public String recovery(String error, Model model) {
-		
 		return "login/passwordRecover";
 		
 	}
@@ -180,7 +181,6 @@ public class PasswordRecoveryController extends AbstractCryptoController{
 	 */
 	@RequestMapping(value="/return/{token}", method=RequestMethod.GET)
 	public String mail(Model model, @PathVariable String token) {
-		System.err.println("Token:   " + token);
 		int identityId = decriptAndValidateToken(token);
 		Identity identity = identityRepository.findOne(identityId);
 		if (identity!=null) {
